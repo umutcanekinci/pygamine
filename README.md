@@ -2,6 +2,8 @@
 
 Shared pygame-ce utilities used across personal game projects. Provides an `Application` base, a component-based game-object layer, a YAML-driven panel/UI system, asset loaders, and a handful of helpers (camera, sprite sheet, audio, database).
 
+See [CHANGELOG.md](CHANGELOG.md) for what changed between versions — useful before bumping a consumer project's submodule pointer past a MINOR version, since 0.y.z means breaking changes can land in a MINOR bump.
+
 ## Installation
 
 This package is consumed as a **git submodule** by the host project — typically vendored under `src/pygame_core/` and added to `PYTHONPATH` (or `sys.path`) by the host's entry point.

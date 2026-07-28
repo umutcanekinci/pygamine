@@ -25,16 +25,18 @@ class Application:
     WINDOW_MODES: tuple[str, ...] = ("fullscreen", "borderless", "windowed")
 
     def __init__(self, size: tuple[int, int], title: str, fps: int, mouse=None,
-                 render_scale: float = 1.0) -> None:
+                 render_scale: float = 1.0, fixed_aspect: bool = False) -> None:
         self._is_running = False
         self._fps = fps
         self._is_in_debug_mode = False
         self._window_mode = "windowed"  # overwritten below by full_screen()
         self._resolution_override: tuple[int, int] | None = None
-        # No longer a "design/authoring resolution" -- just the preferred
-        # default *windowed* size before the player ever picks one explicitly
-        # (see _windowed_physical_size()). The logical canvas (self.window)
-        # is dynamic; it's rebuilt to match whatever size is actually chosen.
+        # By default (fixed_aspect=False) this is no longer a "design/
+        # authoring resolution" -- just the preferred default *windowed*
+        # size before the player ever picks one explicitly (see
+        # _windowed_physical_size()); the logical canvas (self.window) is
+        # dynamic, rebuilt to match whatever size is actually chosen.
+        # fixed_aspect=True changes what this means -- see below.
         self.size: tuple[int, int] = size
         self.window: pygame.Surface | None = None
         # 1.0 (default): self.window always matches the real display exactly,
@@ -42,8 +44,26 @@ class Application:
         # (see set_render_scale()) to render at a fraction of the real
         # display's pixels and let _present() upscale -- a cheap way to trade
         # sharpness for fewer per-frame software blits on weak/mobile
-        # hardware, independent of window mode/resolution.
+        # hardware, independent of window mode/resolution. Orthogonal to
+        # fixed_aspect: this controls render *density*, not aspect ratio.
         self.render_scale = render_scale
+        # False (default): self.window's aspect ratio always matches
+        # display_surface's (see _scaled_render_size()), so _present() never
+        # needs to letterbox/pillarbox -- a mismatched-aspect monitor just
+        # shows more or less of the world, never distortion.
+        #
+        # True: self.window is locked to `size` (the constructor argument,
+        # cached in self.minimized_size) as a genuinely fixed design
+        # resolution, scaled only by render_scale -- for a hand-authored
+        # pixel layout that must never reveal extra space on a wider/
+        # taller monitor. _present()/_sync_mouse_scale() then compute a
+        # centered _fit_rect() and blit into that instead of the full
+        # display, filling the leftover bars with black; Mouse.offset
+        # accounts for those bars so clicks still map to the right logical
+        # coordinate. This is the direct opposite tradeoff from the default:
+        # a monitor whose aspect doesn't match `size` gets letterboxed bars
+        # instead of extra revealed world space.
+        self.fixed_aspect = fixed_aspect
         self.mouse_pos = (0, 0)
         self.mouse = mouse if mouse is not None else Mouse()
         # Set this (typically in a subclass's own __init__, once a display
@@ -161,10 +181,16 @@ class Application:
         self.on_canvas_resized(new_size)
 
     def _scaled_render_size(self) -> tuple[int, int]:
-        display_size = self.display_surface.get_size()
+        if self.fixed_aspect:
+            # Locked to the authored design resolution (self.minimized_size,
+            # the original constructor `size`) regardless of the display's
+            # own shape -- _present() letterboxes/pillarboxes the result.
+            base_size = self.minimized_size
+        else:
+            base_size = self.display_surface.get_size()
         if self.render_scale == 1.0:
-            return display_size
-        return (round(display_size[0] * self.render_scale), round(display_size[1] * self.render_scale))
+            return base_size
+        return (round(base_size[0] * self.render_scale), round(base_size[1] * self.render_scale))
 
     def set_render_scale(self, scale: float) -> None:
         """Change the internal render resolution relative to the real
@@ -277,8 +303,24 @@ class Application:
         self.set_resolution(new_size)
         return new_size
 
+    def _fit_rect(self, dst_size: tuple[int, int]) -> pygame.Rect:
+        """Largest rect that fits dst_size while preserving self.window's
+        aspect ratio, centered inside it. Only meaningful under
+        fixed_aspect=True -- self.window's aspect always matches dst_size's
+        otherwise, so this would just return the full dst_size rect."""
+        dst_w, dst_h = dst_size
+        src_w, src_h = self.window.get_size()
+        scale = min(dst_w / src_w, dst_h / src_h)
+        w, h = round(src_w * scale), round(src_h * scale)
+        return pygame.Rect((dst_w - w) // 2, (dst_h - h) // 2, w, h)
+
     def _sync_mouse_scale(self) -> None:
         if not self.mouse:
+            return
+        if self.fixed_aspect:
+            rect = self._fit_rect(self.display_surface.get_size())
+            self.mouse.scale = (self.window.get_width() / rect.width, self.window.get_height() / rect.height)
+            self.mouse.offset = (rect.x, rect.y)
             return
         physical_width, physical_height = self.display_surface.get_size()
         self.mouse.scale = (self.window.get_width() / physical_width, self.window.get_height() / physical_height)
@@ -314,15 +356,32 @@ class Application:
             self._present()
 
     def _present(self) -> None:
+        dst_size = self.display_surface.get_size()
+
+        if self.fixed_aspect:
+            # self.window is locked to the design resolution (see
+            # _scaled_render_size()), so its aspect ratio generally does
+            # NOT match dst_size -- fill the whole display with black first,
+            # then scale into a centered, aspect-preserving sub-rect rather
+            # than stretching across the full (differently-shaped) display.
+            rect = self._fit_rect(dst_size)
+            if rect.size == dst_size:
+                pygame.transform.scale(self.window, dst_size, self.display_surface)
+            else:
+                self.display_surface.fill((0, 0, 0))
+                pygame.transform.scale(self.window, rect.size, self.display_surface.subsurface(rect))
+            pygame.display.update()
+            return
+
         # At the default render_scale (1.0), self.window always matches
         # display_surface's size exactly (kept in sync by
         # _rebuild_window_surface() on every mode/resolution/render_scale
         # change), so this is a plain 1:1 blit -- no stretching, no
         # letterboxing. Only a render_scale < 1.0 engages the upscale.
-        if self.window.get_size() == self.display_surface.get_size():
+        if self.window.get_size() == dst_size:
             self.display_surface.blit(self.window, (0, 0))
         else:
-            pygame.transform.scale(self.window, self.display_surface.get_size(), self.display_surface)
+            pygame.transform.scale(self.window, dst_size, self.display_surface)
         pygame.display.update()
 
     def _listen_inputs(self) -> None:

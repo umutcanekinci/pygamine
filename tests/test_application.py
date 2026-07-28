@@ -193,6 +193,115 @@ def test_sync_mouse_scale_is_a_noop_without_a_mouse():
     app.full_screen()
 
 
+# ── fixed_aspect: letterboxing/pillarboxing instead of matching the display ──
+#
+# fixed_aspect=True locks self.window to the design resolution (`size`,
+# cached as minimized_size) regardless of the real display's own shape --
+# the opposite default from fixed_aspect=False (self.window always matches
+# the display's aspect, see above). _fit_rect/_present/_sync_mouse_scale
+# then center the locked-aspect window inside the display with black bars,
+# rather than either distorting it (naive stretch) or letting extra world
+# space show through on a mismatched monitor.
+#
+# _TrackedApp always constructs with size=(320, 240) -- a 4:3 design
+# resolution -- so self.window is already locked there once fixed_aspect
+# is on. Rather than going through minimize()/full_screen() (the dummy SDL
+# driver ignores an arbitrary FULLSCREEN size, and minimize()'s own
+# windowed-mode margin/fit math would entangle the numbers), these assign
+# display_surface directly to a Surface of the desired physical size and
+# re-run just _sync_mouse_scale() -- the same thing either real entry point
+# calls after a mode/resolution change -- to exercise the letterbox math in
+# isolation against a known display size.
+
+
+def _set_display_surface(app, size: tuple[int, int]) -> None:
+    app.display_surface = pygame.Surface(size)
+
+
+def test_fit_rect_pillarboxes_when_display_is_wider_than_design_aspect():
+    """1600x900 (16:9) is relatively wider than the fixed 320x240 (4:3)
+    design resolution, so it's height-constrained -- equal bars land on
+    the left/right instead of stretching width and height differently."""
+    app = _TrackedApp(fixed_aspect=True)
+    _set_display_surface(app, (1600, 900))
+
+    rect = app._fit_rect(app.display_surface.get_size())
+
+    assert rect == pygame.Rect(200, 0, 1200, 900)
+
+
+def test_fit_rect_letterboxes_when_display_is_taller_than_design_aspect():
+    """800x900 is relatively taller/narrower than 4:3, so it's width-
+    constrained -- bars land on top/bottom instead."""
+    app = _TrackedApp(fixed_aspect=True)
+    _set_display_surface(app, (800, 900))
+
+    rect = app._fit_rect(app.display_surface.get_size())
+
+    assert rect == pygame.Rect(0, 150, 800, 600)
+
+
+def test_fit_rect_fills_the_display_when_aspect_ratios_already_match():
+    app = _TrackedApp(fixed_aspect=True)
+    _set_display_surface(app, (1280, 960))  # same 4:3 as the 320x240 design
+
+    rect = app._fit_rect(app.display_surface.get_size())
+
+    assert rect == pygame.Rect(0, 0, 1280, 960)
+
+
+def test_sync_mouse_scale_accounts_for_the_pillarbox_offset():
+    app = _TrackedApp(fixed_aspect=True)
+    _set_display_surface(app, (1600, 900))
+
+    app._sync_mouse_scale()
+
+    assert app.mouse.offset == (200, 0)
+    assert app.mouse.scale == (320 / 1200, 240 / 900)
+
+
+def test_present_pillarboxes_instead_of_stretching_under_fixed_aspect():
+    app = _TrackedApp(fixed_aspect=True)
+    _set_display_surface(app, (1600, 900))
+    app.window.fill((10, 20, 30))
+
+    app._present()
+
+    # bars outside the fitted rect (x < 200 or x >= 1400) stay black
+    assert app.display_surface.get_at((0, 0))[:3] == (0, 0, 0)
+    assert app.display_surface.get_at((1599, 0))[:3] == (0, 0, 0)
+    # inside the fitted rect shows the scaled window content, not distorted
+    assert app.display_surface.get_at((800, 450))[:3] == (10, 20, 30)
+
+
+def test_present_is_a_plain_scale_with_no_bars_when_aspect_already_matches():
+    app = _TrackedApp(fixed_aspect=True)
+    _set_display_surface(app, (1280, 960))
+    app.window.fill((10, 20, 30))
+
+    app._present()
+
+    assert app.display_surface.get_at((0, 0))[:3] == (10, 20, 30)
+
+
+def test_fixed_aspect_defaults_to_false():
+    app = _TrackedApp()
+    assert app.fixed_aspect is False
+
+
+def test_without_fixed_aspect_window_still_always_matches_the_display():
+    """Regression guard: fixed_aspect=False (the default) must keep the
+    existing behavior from the section above -- self.window always matches
+    display_surface, never letterboxed."""
+    app = _TrackedApp()
+    _pin_dimensions(app, minimized=(320, 240), full_screen=(1600, 900))
+
+    app.full_screen()
+
+    assert app.window.get_size() == app.display_surface.get_size()
+    assert app.mouse.offset == (0.0, 0.0)
+
+
 # ── resolution picker (available_resolutions / set_resolution / cycle) ──
 
 

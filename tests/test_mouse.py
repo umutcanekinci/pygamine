@@ -86,6 +86,25 @@ def test_update_applies_scale_to_convert_physical_to_logical_position(monkeypatc
     assert mouse.position == (200.0, 200.0)
 
 
+def test_default_offset_is_zero():
+    assert Mouse().offset == (0.0, 0.0)
+
+
+def test_update_applies_offset_before_scale(monkeypatch):
+    """Application sets this when fixed_aspect=True letterboxes/pillarboxes
+    the design resolution onto a differently-shaped display: the physical
+    click first has the bar offset subtracted, then the scale factor is
+    applied, so clicks inside the letterboxed content still land correctly."""
+    monkeypatch.setattr(pygame.mouse, "get_pos", lambda: (120, 50))
+    mouse = Mouse()
+    mouse.offset = (20, 10)
+    mouse.scale = (2.0, 2.0)
+
+    mouse.update()
+
+    assert mouse.position == (200.0, 80.0)  # (120-20)*2, (50-10)*2
+
+
 def test_update_computes_tile_pos_when_tile_size_given(monkeypatch):
     monkeypatch.setattr(pygame.mouse, "get_pos", lambda: (100, 65))
     mouse = Mouse(tile_size=32)

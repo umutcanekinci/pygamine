@@ -57,7 +57,7 @@ in editable mode instead of relying on `sys.path` alone.
 ### Game loop
 | Module | Exports | Notes |
 |---|---|---|
-| `application` | `Application` | Top-level run loop (`init/run/handle_event/update/draw`), fullscreen toggle, debug overlay hook |
+| `application` | `Application` | Top-level run loop (`init/run/handle_event/update/draw`), fullscreen toggle, debug overlay hook, `self.splash`/`show_splash()`, opt-in `fixed_aspect` letterboxing |
 | `mouse` | `Mouse` | Cursor position + optional custom-cursor `GameObject` |
 | `camera` | `Camera` | Edge-scroll camera with world↔screen transforms |
 | `splash_screen` | splash helper | Pre-loop splash render |

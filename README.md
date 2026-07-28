@@ -18,8 +18,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent / "src" / "pygame_core"))
 
 # Now imports work:
-from pygame_core.application import Application
+from pygame_core import Application
 ```
+
+The package's public API is re-exported at the top level (`pygame_core/__init__.py`), so `from pygame_core import Application, GameObject, Camera, ...` covers the classes/functions most consumers need — deep-path imports (`from pygame_core.ecs.game_object import GameObject`) still work too, for anything not surfaced there.
 
 It can also be installed via pip directly from GitHub:
 

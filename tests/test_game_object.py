@@ -6,9 +6,9 @@ from __future__ import annotations
 
 import pygame
 
-from pygame_core.ecs.components.component import Behaviour, Component
-from pygame_core.ecs.components.transform import Transform
-from pygame_core.ecs.game_object import GameObject
+from pygamine.ecs.components.component import Behaviour, Component
+from pygamine.ecs.components.transform import Transform
+from pygamine.ecs.game_object import GameObject
 
 
 # ── construction ───────────────────────────────────────────────────────────
@@ -287,7 +287,7 @@ def test_image_is_none_without_a_sprite_renderer():
 
 
 def test_image_resolves_to_the_sprite_renderers_image():
-    from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
+    from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
 
     go = GameObject()
     renderer = go.add_component(SpriteRenderer2D)
@@ -298,7 +298,7 @@ def test_image_resolves_to_the_sprite_renderers_image():
 
 
 def test_image_reflects_a_later_set_image_call():
-    from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
+    from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
 
     go = GameObject()
     renderer = go.add_component(SpriteRenderer2D)
@@ -326,7 +326,7 @@ def test_image_is_directly_settable_without_a_sprite_renderer():
 
 
 def test_directly_set_image_takes_priority_over_the_sprite_renderer():
-    from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
+    from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
 
     go = GameObject()
     renderer = go.add_component(SpriteRenderer2D)

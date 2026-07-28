@@ -7,9 +7,9 @@ from __future__ import annotations
 import pygame
 import pytest
 
-from pygame_core.camera import Camera
-from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
-from pygame_core.ecs.game_object import GameObject
+from pygamine.camera import Camera
+from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
+from pygamine.ecs.game_object import GameObject
 
 
 @pytest.fixture

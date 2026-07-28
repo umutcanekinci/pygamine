@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/pygame_core.iml" filepath="$PROJECT_DIR$/.idea/pygame_core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/pygamine.iml" filepath="$PROJECT_DIR$/.idea/pygamine.iml" />
     </modules>
   </component>
 </project>

@@ -6,9 +6,9 @@ from __future__ import annotations
 import pygame
 import pytest
 
-from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
-from pygame_core.ecs.game_object import GameObject
-from pygame_core.ui_widgets.text_object import TextObject
+from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
+from pygamine.ecs.game_object import GameObject
+from pygamine.ui_widgets.text_object import TextObject
 
 
 @pytest.fixture
@@ -173,7 +173,7 @@ def test_update_is_a_no_op_with_no_parent(font):
 
 
 def test_update_is_a_no_op_when_parent_transform_has_no_game_object(font):
-    from pygame_core.ecs.components.transform import Transform
+    from pygamine.ecs.components.transform import Transform
 
     orphan_transform = Transform()  # never attached to a GameObject
     label = TextObject(orphan_transform, (0, 0), font=font, states={"default": "D", "hover": "H"})

@@ -14,12 +14,12 @@ from __future__ import annotations
 
 from typing import Any
 import pygame
-from pygame_core.asset_path import PathLike
-from pygame_core.image import load_image
-from pygame_core.ecs.game_object import GameObject
-from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
-from pygame_core.ecs.components.transform import Transform
-from pygame_core.utils import Anchorable, MouseInteractive
+from pygamine.asset_path import PathLike
+from pygamine.image import load_image
+from pygamine.ecs.game_object import GameObject
+from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
+from pygamine.ecs.components.transform import Transform
+from pygamine.utils import Anchorable, MouseInteractive
 
 
 class StateObject(Anchorable, MouseInteractive, GameObject):

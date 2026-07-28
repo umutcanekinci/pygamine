@@ -4,7 +4,7 @@ from pathlib import Path
 import pygame
 import yaml
 
-from pygame_core.asset_path import ImagePath, FontPath, SoundPath
+from pygamine.asset_path import ImagePath, FontPath, SoundPath
 
 
 class AssetManager:

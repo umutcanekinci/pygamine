@@ -6,9 +6,9 @@ from __future__ import annotations
 import pygame
 import pytest
 
-from pygame_core.asset_manager import AssetManager
-from pygame_core.ecs.animated_sprite import AnimatedSprite, AnimatedSpriteFactory
-from pygame_core.ecs.components.transform import Transform
+from pygamine.asset_manager import AssetManager
+from pygamine.ecs.animated_sprite import AnimatedSprite, AnimatedSpriteFactory
+from pygamine.ecs.components.transform import Transform
 
 
 def _frame(color, size=(10, 10)):
@@ -68,8 +68,8 @@ def test_pos_and_parent_position_the_rect():
 
 
 def test_registers_sprite_renderer_and_animator_components():
-    from pygame_core.ecs.components.animator import Animator
-    from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
+    from pygamine.ecs.components.animator import Animator
+    from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
 
     sprite = AnimatedSprite(frames=_frames((1, 2, 3)))
     assert sprite.get_component(SpriteRenderer2D) is not None
@@ -87,7 +87,7 @@ def test_default_clip_starts_playing_immediately():
 
 
 def test_first_frame_is_applied_to_the_renderer_on_construction():
-    from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
+    from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
 
     frames = _frames((255, 0, 0), (0, 255, 0))
     sprite = AnimatedSprite(frames=frames)
@@ -136,7 +136,7 @@ def test_add_clip_registers_a_new_named_clip():
 
 
 def test_play_switches_to_the_named_clip():
-    from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
+    from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
 
     sprite = AnimatedSprite(frames=_frames((255, 0, 0)))
     walk_frames = _frames((0, 255, 0), (0, 0, 255))

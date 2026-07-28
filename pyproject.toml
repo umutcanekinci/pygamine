@@ -3,8 +3,8 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pygame-core"
-version = "0.5.0"
+name = "pygamine"
+version = "0.6.0"
 description = "Shared pygame utilities for personal game projects"
 readme = "README.md"
 authors = [{ name = "Umutcan Ekinci", email = "umutcannekinci@gmail.com" }]
@@ -25,7 +25,7 @@ classifiers = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["pygame_core*"]
+include = ["pygamine*"]
 
 [dependency-groups]
 dev = ["pytest>=8", "ruff>=0.8"]
@@ -49,7 +49,7 @@ select = ["F", "I002"]
 # Enforced repo-wide, not just where a type hint would otherwise need it
 # (ruff's semantic FA rules find nothing on this project's Python 3.12+
 # floor) -- consistency previously enforced this way, this document caught
-# a real cross-project break once already (see CLAUDE.md's pygame_core
+# a real cross-project break once already (see CLAUDE.md's pygamine
 # bump note): a Transform self-referencing type hint needed this import to
 # evaluate lazily, and it only worked locally by accident because that one
 # machine's Python defers annotation evaluation by default anyway.

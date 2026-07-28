@@ -1,4 +1,4 @@
-"""Tiled .tmx base map for pygame_core.
+"""Tiled .tmx base map for pygamine.
 
 Loads a Tiled map via pytmx and exposes the parts every game needs regardless
 of genre: tile dimensions, object-group iteration, an offscreen pre-render of

@@ -1,9 +1,9 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable, TypeVar, cast
-from pygame_core.ecs.components.component import Component, Behaviour
-from pygame_core.ecs.components.transform import Transform
-from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
+from pygamine.ecs.components.component import Component, Behaviour
+from pygamine.ecs.components.transform import Transform
+from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
 import pygame
 
 C = TypeVar("C", bound=Component)

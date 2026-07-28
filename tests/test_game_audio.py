@@ -13,8 +13,8 @@ import wave
 import pytest
 from pygame import mixer
 
-from pygame_core.ecs.game_audio import GameAudio
-from pygame_core.ecs.sound_manager import SoundManager
+from pygamine.ecs.game_audio import GameAudio
+from pygamine.ecs.sound_manager import SoundManager
 
 MUSIC_CHANNEL = 0
 SFX_CHANNEL = 1

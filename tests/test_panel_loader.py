@@ -11,10 +11,10 @@ from __future__ import annotations
 import pygame
 import pytest
 
-from pygame_core.asset_manager import AssetManager
-from pygame_core.ecs.components.transform import Transform
-from pygame_core.panel_loader import PanelLoader
-from pygame_core.panel_manager import PanelManager
+from pygamine.asset_manager import AssetManager
+from pygamine.ecs.components.transform import Transform
+from pygamine.panel_loader import PanelLoader
+from pygamine.panel_manager import PanelManager
 
 
 class _Built:

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import pygame
-from pygame_core.ecs.game_object_dict import GameObjectDict
+from pygamine.ecs.game_object_dict import GameObjectDict
 
 
 class PanelManager:

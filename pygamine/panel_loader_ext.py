@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import yaml
 from pathlib import Path
-from pygame_core.panel_loader import PanelLoader
+from pygamine.panel_loader import PanelLoader
 
 
 class PanelLoaderExt(PanelLoader):

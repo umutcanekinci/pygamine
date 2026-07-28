@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from pygame_core.asset_manager import AssetManager
+from pygamine.asset_manager import AssetManager
 from pathlib import Path
 from typing import Any, Callable
 import yaml
 
-from pygame_core.ecs.components.transform import Transform
+from pygamine.ecs.components.transform import Transform
 
 # Factory signature: config dict + window_size → object
 ObjectFactory = Callable[[dict, tuple[int, int]], Any]

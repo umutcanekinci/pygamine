@@ -4,9 +4,9 @@ from typing import Callable
 
 import pygame
 
-from pygame_core.ecs.game_object import GameObject
-from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
-from pygame_core.utils import Anchorable, MouseInteractive
+from pygamine.ecs.game_object import GameObject
+from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
+from pygamine.utils import Anchorable, MouseInteractive
 
 
 class Slider(Anchorable, MouseInteractive, GameObject):

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pygame
 
-from pygame_core.spatial_grid import SpatialGrid
+from pygamine.spatial_grid import SpatialGrid
 
 
 class _Obj:

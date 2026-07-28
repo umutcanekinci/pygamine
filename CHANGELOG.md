@@ -13,6 +13,21 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.6.0] — 2026-07-29
+
+- **Changed** (breaking): renamed the package/distribution/repository from
+  `pygame_core`/`pygame-core` to **`pygamine`** -- PyPI already has an
+  unrelated package literally named `pygame-core` (and a near-identical
+  `pygame-pygame-core`), so publishing this under that name was never
+  actually available. `import pygamine` replaces `import pygame_core`
+  everywhere (deep-path imports too: `pygamine.ecs.game_object`, etc.);
+  the GitHub repository itself moved to
+  `https://github.com/umutcanekinci/pygamine` (old URL redirects, but
+  consumers should point `.gitmodules`/`pyproject.toml` at the new one
+  directly rather than relying on that indefinitely). No behavioral
+  changes -- this is a pure rename, every module/class/function keeps its
+  previous name and semantics.
+
 ## [0.5.0] — 2026-07-28
 
 - **Added** `Application.restore_window_settings(saved_settings)`,
@@ -73,7 +88,7 @@ change. Anything before `e5c1fa6` (the commit that first introduced
 
 ## [0.3.0] — 2026-07-28
 
-- **Added** a curated public API at the package root: `from pygame_core import
+- **Added** a curated public API at the package root: `from pygamine import
   Application, GameObject, Camera, ...` now covers the ~66 names actually used
   across every consumer project, resolved lazily (PEP 562 module `__getattr__`)
   so importing a lightweight name never forces optional dependencies
@@ -97,7 +112,7 @@ change. Anything before `e5c1fa6` (the commit that first introduced
   entire `net` (protocol/transport) subsystem.
 - **Fixed** (documentation) — every consumer's `[tool.uv.sources]` override for
   an editable local install had no effect, since none of them actually listed
-  `pygame-core` under `[project.dependencies]`; documented in the README so
+  `pygamine` under `[project.dependencies]`; documented in the README so
   it's not copy-pasted as dead boilerplate again.
 
 ## [0.2.0] — 2026-07-08

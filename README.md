@@ -1,4 +1,4 @@
-# pygame_core
+# pygamine
 
 Shared pygame-ce utilities used across personal game projects. Provides an `Application` base, a component-based game-object layer, a YAML-driven panel/UI system, asset loaders, and a handful of helpers (camera, sprite sheet, audio, database).
 
@@ -6,10 +6,10 @@ See [CHANGELOG.md](CHANGELOG.md) for what changed between versions — useful be
 
 ## Installation
 
-This package is consumed as a **git submodule** by the host project — typically vendored under `src/pygame_core/` and added to `PYTHONPATH` (or `sys.path`) by the host's entry point.
+This package is consumed as a **git submodule** by the host project — typically vendored under `src/pygamine/` and added to `PYTHONPATH` (or `sys.path`) by the host's entry point.
 
 ```bash
-git submodule add https://github.com/umutcanekinci/pygame-core.git src/pygame_core
+git submodule add https://github.com/umutcanekinci/pygamine.git src/pygamine
 ```
 
 Then in the host's entry script:
@@ -17,18 +17,18 @@ Then in the host's entry script:
 ```python
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent / "src" / "pygame_core"))
+sys.path.insert(0, str(Path(__file__).parent / "src" / "pygamine"))
 
 # Now imports work:
-from pygame_core import Application
+from pygamine import Application
 ```
 
-The package's public API is re-exported at the top level (`pygame_core/__init__.py`), so `from pygame_core import Application, GameObject, Camera, ...` covers the classes/functions most consumers need — deep-path imports (`from pygame_core.ecs.game_object import GameObject`) still work too, for anything not surfaced there.
+The package's public API is re-exported at the top level (`pygamine/__init__.py`), so `from pygamine import Application, GameObject, Camera, ...` covers the classes/functions most consumers need — deep-path imports (`from pygamine.ecs.game_object import GameObject`) still work too, for anything not surfaced there.
 
 It can also be installed via pip directly from GitHub:
 
 ```bash
-pip install git+https://github.com/umutcanekinci/pygame-core.git
+pip install git+https://github.com/umutcanekinci/pygamine.git
 ```
 
 Requires Python 3.12+ and `pygame-ce`.
@@ -39,18 +39,18 @@ Every current host project's `pyproject.toml` also carries:
 
 ```toml
 [tool.uv.sources]
-pygame-core = { path = "src/pygame_core", editable = true }
+pygamine = { path = "src/pygamine", editable = true }
 ```
 
 This override only takes effect for a dependency `uv` actually resolves —
-i.e. it requires `"pygame-core"` to also be listed under
+i.e. it requires `"pygamine"` to also be listed under
 `[project.dependencies]`. As of this writing, none of the host projects
 add it there (`uv pip list` in each shows `pygame-ce`, never
-`pygame-core`), so this block is currently inert boilerplate everywhere,
+`pygamine`), so this block is currently inert boilerplate everywhere,
 copied from project to project without the matching dependency entry.
-The `sys.path` insertion above is what actually makes `import pygame_core`
+The `sys.path` insertion above is what actually makes `import pygamine`
 work today in every one of them. If a host project wants the `uv.sources`
-override to do something, add `"pygame-core"` to its own
+override to do something, add `"pygamine"` to its own
 `[project.dependencies]` too — `uv sync` will then install this submodule
 in editable mode instead of relying on `sys.path` alone.
 
@@ -129,9 +129,9 @@ GUI-free and application-agnostic — these classes move framed messages over TC
 ### Load a sprite sheet → animated sprite
 
 ```python
-from pygame_core.sprite_sheet import SpriteSheet
-from pygame_core.ecs.components.animation_clip import AnimationClip
-from pygame_core.ecs.animated_sprite import AnimatedSprite
+from pygamine.sprite_sheet import SpriteSheet
+from pygamine.ecs.components.animation_clip import AnimationClip
+from pygamine.ecs.animated_sprite import AnimatedSprite
 
 frames = SpriteSheet.from_path("coin_strip4.png").strip(4)
 coin = AnimatedSprite(frames=frames, fps=8, pos=(100, 100))
@@ -143,7 +143,7 @@ coin.draw(surface)
 ### Asset path helpers
 
 ```python
-from pygame_core.asset_path import ImagePath, FontPath, SoundPath
+from pygamine.asset_path import ImagePath, FontPath, SoundPath
 
 ImagePath("player")             # → assets/images/player.png
 ImagePath("hero", "sprites")    # → assets/images/sprites/hero.png
@@ -156,7 +156,7 @@ All `AssetPath` subclasses implement `__fspath__`, so they can be passed directl
 ### Database
 
 ```python
-from pygame_core.database import Database
+from pygamine.database import Database
 
 db = Database("savefile")
 rows = db.execute_safely(
@@ -169,6 +169,6 @@ rows = db.execute_safely(
 
 ## Adding a new module
 
-1. Create `pygame_core/<module>.py`
-2. Import it where needed: `from pygame_core.<module> import ...`
+1. Create `pygamine/<module>.py`
+2. Import it where needed: `from pygamine.<module> import ...`
 3. No reinstall required when consumed as a submodule on `sys.path`

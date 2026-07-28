@@ -11,8 +11,8 @@ from __future__ import annotations
 import pygame
 import pytest
 
-from pygame_core.ecs.components.transform import Transform
-from pygame_core.ecs.state_object import HoverableStateObject, StateObject
+from pygamine.ecs.components.transform import Transform
+from pygamine.ecs.state_object import HoverableStateObject, StateObject
 
 
 def _save_png(path, color, size=(20, 20)):

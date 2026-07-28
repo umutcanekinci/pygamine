@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pygame import Vector2
-from pygame_core.ecs.components.component import Component
+from pygamine.ecs.components.component import Component
 
 class Rigidbody2D(Component):
     def __init__(self):

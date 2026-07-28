@@ -5,7 +5,7 @@ from typing import Protocol, runtime_checkable
 import pygame
 from pygame.math import Vector2
 
-from pygame_core.image import scale_by
+from pygamine.image import scale_by
 
 EDGE_SCROLL_ZONE = 30
 CAMERA_SPEED     = 10

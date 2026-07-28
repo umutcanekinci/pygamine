@@ -9,7 +9,7 @@ import struct
 
 import pytest
 
-from pygame_core.net.protocol import (
+from pygamine.net.protocol import (
     JSONCodec,
     PickleCodec,
     Protocol,

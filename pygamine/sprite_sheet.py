@@ -1,6 +1,6 @@
 """SpriteSheet: slice a single image into a list of frame surfaces.
 
-Pairs naturally with pygame_core.ecs.components.animator.AnimationClip:
+Pairs naturally with pygamine.ecs.components.animator.AnimationClip:
 
     sheet  = SpriteSheet.from_path("coin_strip4.png")
     frames = sheet.strip(4)
@@ -15,8 +15,8 @@ you know the source will outlive the frames.
 from __future__ import annotations
 
 import pygame
-from pygame_core.asset_path import PathLike
-from pygame_core.image import load_image
+from pygamine.asset_path import PathLike
+from pygamine.image import load_image
 
 
 class SpriteSheet:

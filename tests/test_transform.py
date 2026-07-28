@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import pytest
 
-from pygame_core.ecs.components.transform import Transform
+from pygamine.ecs.components.transform import Transform
 
 
 def test_default_construction():

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import pygame
-from pygame_core.ecs.components.component import Component
+from pygamine.ecs.components.component import Component
 
 
 class SpriteRenderer2D(Component):

@@ -1,14 +1,14 @@
-"""pygame_core/__init__.py's lazy public-API surface.
+"""pygamine/__init__.py's lazy public-API surface.
 
 Every name it advertises must actually resolve, but resolving a *lightweight*
 name (no optional-dependency modules like asset_manager/tilemap involved)
 must not eagerly import the *heavy* ones -- some consumers of this package
 deliberately don't install pyyaml/pytmx because they don't use
 AssetManager/PanelManager/TiledMap at all (see artifical-chaos's CLAUDE.md).
-An eager `import pygame_core` that pulls in every submodule unconditionally
+An eager `import pygamine` that pulls in every submodule unconditionally
 would force those consumers to install dependencies they never touch.
 Exercised via a subprocess so sys.modules starts genuinely empty -- the rest
-of this test session already imports plenty of pygame_core submodules
+of this test session already imports plenty of pygamine submodules
 directly, which would make an in-process check meaningless.
 """
 from __future__ import annotations
@@ -16,16 +16,16 @@ import os
 import subprocess
 import sys
 
-import pygame_core
+import pygamine
 
 
 def test_every_advertised_name_actually_resolves():
-    missing = [name for name in pygame_core.__all__ if not hasattr(pygame_core, name)]
+    missing = [name for name in pygamine.__all__ if not hasattr(pygamine, name)]
     assert missing == []
 
 
 def test_dir_includes_the_full_public_api():
-    assert set(pygame_core.__all__) <= set(dir(pygame_core))
+    assert set(pygamine.__all__) <= set(dir(pygamine))
 
 
 def _run(code: str) -> str:
@@ -41,7 +41,7 @@ def _run(code: str) -> str:
 
 def test_importing_the_package_does_not_eagerly_load_optional_dependency_modules():
     out = _run(
-        "import pygame_core\n"
+        "import pygamine\n"
         "import sys\n"
         "print('asset_manager' in sys.modules, 'tilemap' in sys.modules)\n"
     )
@@ -50,22 +50,22 @@ def test_importing_the_package_does_not_eagerly_load_optional_dependency_modules
 
 def test_accessing_a_lightweight_name_does_not_pull_in_asset_manager_or_tilemap():
     out = _run(
-        "import pygame_core\n"
-        "pygame_core.Application\n"
-        "pygame_core.GameObject\n"
+        "import pygamine\n"
+        "pygamine.Application\n"
+        "pygamine.GameObject\n"
         "import sys\n"
-        "print('pygame_core.asset_manager' in sys.modules, 'pygame_core.tilemap' in sys.modules)\n"
+        "print('pygamine.asset_manager' in sys.modules, 'pygamine.tilemap' in sys.modules)\n"
     )
     assert out == "False False"
 
 
 def test_accessing_asset_manager_does_import_it_and_caches_the_result():
     out = _run(
-        "import pygame_core\n"
-        "pygame_core.AssetManager\n"
+        "import pygamine\n"
+        "pygamine.AssetManager\n"
         "import sys\n"
-        "print('pygame_core.asset_manager' in sys.modules)\n"
-        "print(pygame_core.__dict__['AssetManager'] is pygame_core.AssetManager)\n"
+        "print('pygamine.asset_manager' in sys.modules)\n"
+        "print(pygamine.__dict__['AssetManager'] is pygamine.AssetManager)\n"
     )
     assert out == "True\nTrue"
 
@@ -73,4 +73,4 @@ def test_accessing_asset_manager_does_import_it_and_caches_the_result():
 def test_unknown_attribute_raises_attribute_error():
     import pytest
     with pytest.raises(AttributeError):
-        pygame_core.ThisNameDoesNotExist
+        pygamine.ThisNameDoesNotExist

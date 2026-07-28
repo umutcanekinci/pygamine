@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pygame
 
-from pygame_core.ui_widgets.menu_controller import MenuController
+from pygamine.ui_widgets.menu_controller import MenuController
 
 
 class _FakeButton:

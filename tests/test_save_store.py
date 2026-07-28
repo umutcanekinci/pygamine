@@ -8,7 +8,7 @@ import json
 
 import pytest
 
-from pygame_core.save_store import SaveStore
+from pygamine.save_store import SaveStore
 
 
 @pytest.fixture(autouse=True)

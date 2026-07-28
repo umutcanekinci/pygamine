@@ -10,8 +10,8 @@ from __future__ import annotations
 import pygame
 import pytest
 
-from pygame_core.ecs.components.transform import Transform
-from pygame_core.ui_widgets.slider import Slider
+from pygamine.ecs.components.transform import Transform
+from pygamine.ui_widgets.slider import Slider
 
 
 @pytest.fixture(autouse=True)

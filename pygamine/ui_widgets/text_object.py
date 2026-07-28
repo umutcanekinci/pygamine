@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pygame
 
-from pygame_core.utils import Anchorable
-from pygame_core.ecs.game_object import GameObject
-from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
+from pygamine.utils import Anchorable
+from pygamine.ecs.game_object import GameObject
+from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
 
 
 class TextObject(GameObject, Anchorable):

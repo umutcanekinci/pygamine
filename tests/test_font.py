@@ -12,8 +12,8 @@ import os
 import pygame
 import pytest
 
-from pygame_core.asset_manager import AssetManager
-from pygame_core.font import load_font
+from pygamine.asset_manager import AssetManager
+from pygamine.font import load_font
 
 
 @pytest.fixture

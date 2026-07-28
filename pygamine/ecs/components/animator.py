@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pygame
 
-from pygame_core.ecs.components.animation_clip import AnimationClip
-from pygame_core.ecs.components.component import Component
-from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
+from pygamine.ecs.components.animation_clip import AnimationClip
+from pygamine.ecs.components.component import Component
+from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
 
 
 class Animator(Component):

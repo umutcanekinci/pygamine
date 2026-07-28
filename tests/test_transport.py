@@ -14,7 +14,7 @@ import threading
 
 import pytest
 
-from pygame_core.net.transport import BaseClient, BaseServer
+from pygamine.net.transport import BaseClient, BaseServer
 from _util import wait_until, start_in_thread, connect_raw
 
 # Real sockets — slower than unit tests, so CI runs these but the pre-commit

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from pygame_core.utils import Anchorable, resolve_size
+from pygamine.utils import Anchorable, resolve_size
 
 
 # ── resolve_size ──────────────────────────────────────────────────────────

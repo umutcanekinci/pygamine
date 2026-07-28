@@ -17,7 +17,7 @@ import socket
 import threading
 from typing import Any, Callable
 
-from pygame_core.net.protocol import Protocol, ProtocolError
+from pygamine.net.protocol import Protocol, ProtocolError
 
 
 class Connection:

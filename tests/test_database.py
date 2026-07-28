@@ -7,7 +7,7 @@ import sqlite3
 
 import pytest
 
-from pygame_core.database import Database
+from pygamine.database import Database
 
 
 @pytest.fixture(autouse=True)

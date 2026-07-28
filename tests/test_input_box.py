@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pygame
 
-from pygame_core.ui_widgets.input_box import InputBox
+from pygamine.ui_widgets.input_box import InputBox
 
 
 def test_construction_sets_rect_text_and_defaults():

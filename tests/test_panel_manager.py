@@ -7,7 +7,7 @@ from __future__ import annotations
 import pygame
 import pytest
 
-from pygame_core.panel_manager import PanelManager
+from pygamine.panel_manager import PanelManager
 
 
 class _Tracked:

@@ -5,8 +5,8 @@ from __future__ import annotations
 
 from pygame import Vector2
 
-from pygame_core.ecs.components.rigidbody2d import Rigidbody2D
-from pygame_core.ecs.game_object import GameObject
+from pygamine.ecs.components.rigidbody2d import Rigidbody2D
+from pygamine.ecs.game_object import GameObject
 
 
 def test_zero_velocity_update_is_a_no_op():

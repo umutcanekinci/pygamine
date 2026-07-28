@@ -13,13 +13,13 @@ import os
 import pygame
 import pytest
 
-from pygame_core.asset_manager import AssetManager
-from pygame_core.ecs.animated_sprite import AnimatedSprite
-from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
-from pygame_core.ecs.components.transform import Transform
-from pygame_core.ecs.state_object import HoverableStateObject, StateObject
-from pygame_core.panel_factory import make_animated_factory, make_factory, make_text_factory
-from pygame_core.ui_widgets.text_object import TextObject
+from pygamine.asset_manager import AssetManager
+from pygamine.ecs.animated_sprite import AnimatedSprite
+from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
+from pygamine.ecs.components.transform import Transform
+from pygamine.ecs.state_object import HoverableStateObject, StateObject
+from pygamine.panel_factory import make_animated_factory, make_factory, make_text_factory
+from pygamine.ui_widgets.text_object import TextObject
 
 
 def _save_png(path, size, color):

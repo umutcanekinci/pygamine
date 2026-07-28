@@ -10,7 +10,7 @@ from __future__ import annotations
 import pygame
 import pytest
 
-from pygame_core.splash_screen import SplashScreen
+from pygamine.splash_screen import SplashScreen
 
 
 def _save_png(path, size, color):

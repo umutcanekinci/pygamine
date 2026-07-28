@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import pygame
 
-from pygame_core.mouse import Mouse
+from pygamine.mouse import Mouse
 
 
 class _FakeCursor:

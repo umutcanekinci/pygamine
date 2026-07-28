@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import pytest
 
-from pygame_core.ecs.components.component import Behaviour, Component, MonoBehaviour
+from pygamine.ecs.components.component import Behaviour, Component, MonoBehaviour
 
 
 def test_component_game_object_defaults_to_none():

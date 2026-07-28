@@ -67,8 +67,8 @@ wheels = [
 ]
 
 [[package]]
-name = "pygame-core"
-version = "0.5.0"
+name = "pygamine"
+version = "0.6.0"
 source = { editable = "." }
 dependencies = [
     { name = "pygame-ce" },

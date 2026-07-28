@@ -712,6 +712,75 @@ def test_run_stops_via_a_queued_quit_event(monkeypatch, no_real_exit):
     assert no_real_exit["sys_exit"] == 1
 
 
+# ── splash (show_splash / run() integration) ──────────────────────────────
+#
+# Every project that sets self.splash used to override run() itself to call
+# splash.run(...) before super().run() -- five copies of the identical
+# comment explaining why (bypassing _present()'s scale step). Moved into
+# Application itself: run() always calls show_splash() first, which is a
+# no-op while self.splash stays None (the default set in __init__).
+
+
+class _FakeSplash:
+    def __init__(self):
+        self.calls = []
+
+    def run(self, surface, clock, fps):
+        self.calls.append((surface, clock, fps))
+
+
+def test_splash_defaults_to_none():
+    app = _TrackedApp()
+    assert app.splash is None
+
+
+def test_show_splash_is_a_noop_when_none_is_set():
+    app = _TrackedApp()
+    app.show_splash()  # must not raise
+
+
+def test_show_splash_delegates_to_the_splash_screen_with_the_real_display_surface():
+    app = _TrackedApp()
+    fake = _FakeSplash()
+    app.splash = fake
+
+    app.show_splash()
+
+    assert fake.calls == [(app.display_surface, app.clock, app._fps)]
+
+
+def test_run_shows_the_splash_exactly_once_before_the_main_loop(monkeypatch):
+    monkeypatch.setattr(pygame.event, "get", lambda: [])
+    app = _TrackedApp()
+    fake = _FakeSplash()
+    app.splash = fake
+
+    def _stop():
+        app.update_calls += 1
+        app._is_running = False
+
+    app.update = _stop
+    app.run()
+
+    assert len(fake.calls) == 1
+    assert app.update_calls == 1  # loop still ran normally afterward
+
+
+def test_run_skips_splash_entirely_when_none_is_set(monkeypatch):
+    monkeypatch.setattr(pygame.event, "get", lambda: [])
+    app = _TrackedApp()
+    assert app.splash is None
+
+    def _stop():
+        app.update_calls += 1
+        app._is_running = False
+
+    app.update = _stop
+    app.run()  # must not raise despite no splash ever being set
+
+    assert app.update_calls == 1
+
+
 # ── exit() ──────────────────────────────────────────────────────────────
 
 

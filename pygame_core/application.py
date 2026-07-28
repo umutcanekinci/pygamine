@@ -5,6 +5,7 @@ import os
 import pygame
 from pygame import mixer
 from pygame_core.mouse import Mouse
+from pygame_core.splash_screen import SplashScreen
 
 # Common desktop resolutions offered by a windowed-mode resolution picker
 # (available_resolutions() filters this down to what fits the
@@ -45,6 +46,11 @@ class Application:
         self.render_scale = render_scale
         self.mouse_pos = (0, 0)
         self.mouse = mouse if mouse is not None else Mouse()
+        # Set this (typically in a subclass's own __init__, once a display
+        # surface exists for SplashScreen's own image loading) to have
+        # run() show it automatically before the main loop starts. None
+        # (the default) skips straight to the loop -- see show_splash().
+        self.splash: SplashScreen | None = None
 
         self.init_pygame()
         self.set_title(title)
@@ -280,7 +286,20 @@ class Application:
     def set_size(self, size: tuple) -> None:
         self.size = self.width, self.height = size
 
+    def show_splash(self) -> None:
+        """Runs self.splash's own blocking loop (if one was set), then
+        returns once it's done -- a no-op if self.splash is still None.
+
+        SplashScreen.run() calls pygame.display.update() itself each frame
+        against display_surface directly, bypassing _present()'s scale
+        step entirely -- drawing it onto the offscreen logical canvas
+        (self.window) instead would never actually reach the screen, since
+        nothing would blit that canvas until the main loop below starts."""
+        if self.splash is not None:
+            self.splash.run(self.display_surface, self.clock, self._fps)
+
     def run(self) -> None:
+        self.show_splash()
         self._is_running = True
 
         while self._is_running:

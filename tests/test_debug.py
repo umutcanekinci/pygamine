@@ -1,6 +1,7 @@
 """Unit tests for Debug: the F1 debug-overlay renderer (background panel,
 border, and per-source key/value text lines).
 """
+from __future__ import annotations
 
 import pygame
 import pytest

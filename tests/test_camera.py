@@ -2,6 +2,7 @@
 zoom-at-cursor, and the offset clamping that keeps the map filling its
 viewport instead of showing empty space past its edges.
 """
+from __future__ import annotations
 
 import pygame
 import pytest

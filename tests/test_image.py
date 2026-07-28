@@ -1,6 +1,7 @@
 """Unit tests for image.py: load_image (cached, with a size-convention mini
 DSL), scale, scale_by, and nine_slice_scale.
 """
+from __future__ import annotations
 
 import pygame
 import pytest

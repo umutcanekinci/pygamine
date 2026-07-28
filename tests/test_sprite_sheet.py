@@ -2,9 +2,9 @@
 via strip (single row/column), grid (rows x cols), and frame (one specific
 cell), plus the copy vs. subsurface-view distinction.
 """
+from __future__ import annotations
 
 import pygame
-import pytest
 
 from pygame_core.asset_manager import AssetManager
 from pygame_core.sprite_sheet import SpriteSheet

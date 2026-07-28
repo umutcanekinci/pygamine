@@ -6,6 +6,7 @@ through) and _scale_def in isolation (the UI-rescaling math used when a
 game renders at a different resolution than its layout was authored for,
 e.g. standoff's desktop-vs-mobile render size).
 """
+from __future__ import annotations
 
 import pygame
 import pytest

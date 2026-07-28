@@ -4,6 +4,7 @@ These pin the YAML-driven layout math every panel/UI object goes through
 (config/panels.yaml's `size`/`position`/`anchor` keys) -- a regression here
 silently misplaces or mis-sizes UI across every consuming project.
 """
+from __future__ import annotations
 
 import pytest
 

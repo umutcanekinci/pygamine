@@ -6,7 +6,7 @@ import os
 
 
 class Database:
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
         self.name = name
         self.connection: sqlite3.Connection | None = None
 
@@ -23,7 +23,7 @@ class Database:
         else:
             return True
 
-    def get_cursor(self):
+    def get_cursor(self) -> sqlite3.Cursor:
         assert self.connection is not None, "Database not connected"
         return self.connection.cursor()
 
@@ -39,17 +39,17 @@ class Database:
 
         return result
 
-    def execute(self, sql, params: tuple = ()):
+    def execute(self, sql: str, params: tuple = ()) -> sqlite3.Cursor:
         try:
             return self.get_cursor().execute(sql, params)
         except Exception as error:
             print("An error occured during execute sql code:", error)
             return sys.exit()
 
-    def commit(self):
+    def commit(self) -> None:
         assert self.connection is not None, "Database not connected"
         self.connection.commit()
 
-    def disconnect(self):
+    def disconnect(self) -> None:
         assert self.connection is not None, "Database not connected"
         self.connection.close()

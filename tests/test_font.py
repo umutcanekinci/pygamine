@@ -5,6 +5,7 @@ Dedicated, direct tests for this module -- it already had indirect coverage
 via panel_factory's make_text_factory tests, but those only exercise it
 through TextObject construction.
 """
+from __future__ import annotations
 
 import os
 

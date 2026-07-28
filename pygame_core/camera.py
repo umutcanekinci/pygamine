@@ -19,7 +19,7 @@ class Camera:
                  speed: int = CAMERA_SPEED,
                  zoom_step: float = ZOOM_STEP,
                  zoom_min: float = ZOOM_MIN,
-                 zoom_max: float = ZOOM_MAX):
+                 zoom_max: float = ZOOM_MAX) -> None:
         self.rect        = rect
         self.scroll_rect = scroll_rect or rect
         self._offset     = Vector2(0.0, 0.0)
@@ -51,7 +51,7 @@ class Camera:
 
     # ── drawing ───────────────────────────────────────────────────────────────
 
-    def draw(self, surface, entity):
+    def draw(self, surface, entity) -> None:
         image = entity.rotated_image if getattr(entity, 'is_rotated', False) else entity.get_component(SpriteRenderer2D).image
         scaled = self.scale_image(image)
         center = self.world_to_screen(entity.rect.center)
@@ -64,7 +64,7 @@ class Camera:
         if event.type == pygame.MOUSEWHEEL and self._inside_viewport(mouse_pos):
             self._zoom_at(mouse_pos, self.scale * (1.0 + self._zoom_step * event.y))
 
-    def update_with_mouse(self, mouse_pos):
+    def update_with_mouse(self, mouse_pos) -> None:
         if not self.scroll_rect.collidepoint(mouse_pos):
             return
         mx, my = mouse_pos
@@ -104,7 +104,7 @@ class Camera:
         self._offset.x = max(min_x, min(0, self._offset.x))
         self._offset.y = max(min_y, min(0, self._offset.y))
 
-    def info(self):
+    def info(self) -> tuple[str, dict]:
         return "Camera Info:", {
             "offset": (round(self._offset.x, 1), round(self._offset.y, 1)),
             "scale":  round(self.scale, 2),

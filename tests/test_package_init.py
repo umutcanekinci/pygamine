@@ -11,6 +11,7 @@ Exercised via a subprocess so sys.modules starts genuinely empty -- the rest
 of this test session already imports plenty of pygame_core submodules
 directly, which would make an in-process check meaningless.
 """
+from __future__ import annotations
 import os
 import subprocess
 import sys

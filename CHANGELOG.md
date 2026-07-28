@@ -13,6 +13,24 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.3.1] — 2026-07-28
+
+- **Added** a CI lint job (`ruff check .`) and a `[tool.ruff.lint]` config,
+  deliberately narrow: `F` (pyflakes — real bugs) and `I002` specifically
+  (enforces `from __future__ import annotations` repo-wide via isort's
+  required-imports check, not the full `I` sort-order category). Fixed the
+  handful of files this caught: two real files missing the future import
+  (`animation_clip.py`, `ui_widgets/input_box.py`), an unused `pathlib.Path`
+  import, and every test file that was also missing it.
+- **Fixed** a real bug this surfaced: `MouseInteractive.is_clicked()` computed
+  a local `pressed` variable that was never used, and had a string literal
+  positioned one line too late to actually function as the method's
+  docstring (docstrings must be the first statement in the body).
+- **Added** type hints (return types, mostly) to `Component`/`Behaviour`/
+  `MonoBehaviour`, `Database`, `Camera`, `MouseInteractive`/`Anchorable`
+  (`utils.py`), and a full pass (hints + a class docstring) on
+  `ui_widgets/input_box.py`, which previously had neither.
+
 ## [0.3.0] — 2026-07-28
 
 - **Added** a curated public API at the package root: `from pygame_core import

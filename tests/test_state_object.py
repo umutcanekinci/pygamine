@@ -6,6 +6,7 @@ Uses real image files under tmp_path (load_image needs a real, loadable
 file + convert_alpha(), which needs a display mode set even under the
 dummy SDL driver) rather than mocking image loading away.
 """
+from __future__ import annotations
 
 import pygame
 import pytest

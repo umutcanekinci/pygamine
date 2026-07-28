@@ -26,65 +26,85 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     # For type checkers / IDE autocomplete only -- never executed at runtime
     # (see the lazy __getattr__ below for why these aren't real imports).
+    # `as X` on every name is the standard "redundant alias" idiom type
+    # checkers and ruff (F401) both recognize as an intentional re-export --
+    # without it, every one of these reads as an unused import, since
+    # nothing in this file references them outside of __all__/_EXPORTS.
 
     # Application / window management
-    from pygame_core.application import Application
-    from pygame_core.mouse import Mouse
-    from pygame_core.camera import Camera
-    from pygame_core.debug import Debug
-    from pygame_core.splash_screen import SplashScreen
+    from pygame_core.application import Application as Application
+    from pygame_core.mouse import Mouse as Mouse
+    from pygame_core.camera import Camera as Camera
+    from pygame_core.debug import Debug as Debug
+    from pygame_core.splash_screen import SplashScreen as SplashScreen
 
     # ECS core
-    from pygame_core.ecs.game_object import GameObject
-    from pygame_core.ecs.game_object_dict import GameObjectDict
-    from pygame_core.ecs.game_object_list import GameObjectList
-    from pygame_core.ecs.state_object import StateObject, HoverableStateObject
-    from pygame_core.ecs.animated_sprite import AnimatedSprite, AnimatedSpriteFactory
-    from pygame_core.ecs.game_audio import GameAudio, MUSIC_CHANNEL, SFX_CHANNEL
-    from pygame_core.ecs.sound_manager import SoundManager
+    from pygame_core.ecs.game_object import GameObject as GameObject
+    from pygame_core.ecs.game_object_dict import GameObjectDict as GameObjectDict
+    from pygame_core.ecs.game_object_list import GameObjectList as GameObjectList
+    from pygame_core.ecs.state_object import StateObject as StateObject, HoverableStateObject as HoverableStateObject
+    from pygame_core.ecs.animated_sprite import AnimatedSprite as AnimatedSprite, AnimatedSpriteFactory as AnimatedSpriteFactory
+    from pygame_core.ecs.game_audio import GameAudio as GameAudio, MUSIC_CHANNEL as MUSIC_CHANNEL, SFX_CHANNEL as SFX_CHANNEL
+    from pygame_core.ecs.sound_manager import SoundManager as SoundManager
 
     # ECS components
-    from pygame_core.ecs.components.component import Component, Behaviour, MonoBehaviour
-    from pygame_core.ecs.components.transform import Transform
-    from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
-    from pygame_core.ecs.components.rigidbody2d import Rigidbody2D
-    from pygame_core.ecs.components.animator import Animator
-    from pygame_core.ecs.components.animation_clip import AnimationClip
+    from pygame_core.ecs.components.component import (
+        Component as Component, Behaviour as Behaviour, MonoBehaviour as MonoBehaviour,
+    )
+    from pygame_core.ecs.components.transform import Transform as Transform
+    from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D as SpriteRenderer2D
+    from pygame_core.ecs.components.rigidbody2d import Rigidbody2D as Rigidbody2D
+    from pygame_core.ecs.components.animator import Animator as Animator
+    from pygame_core.ecs.components.animation_clip import AnimationClip as AnimationClip
 
     # Assets
-    from pygame_core.asset_path import AssetPath, ImagePath, FontPath, SoundPath, PathLike
-    from pygame_core.asset_manager import AssetManager
-    from pygame_core.sprite_sheet import SpriteSheet
-    from pygame_core.image import load_image, scale, scale_by, nine_slice_scale
-    from pygame_core.font import load_font
+    from pygame_core.asset_path import (
+        AssetPath as AssetPath, ImagePath as ImagePath, FontPath as FontPath,
+        SoundPath as SoundPath, PathLike as PathLike,
+    )
+    from pygame_core.asset_manager import AssetManager as AssetManager
+    from pygame_core.sprite_sheet import SpriteSheet as SpriteSheet
+    from pygame_core.image import (
+        load_image as load_image, scale as scale, scale_by as scale_by, nine_slice_scale as nine_slice_scale,
+    )
+    from pygame_core.font import load_font as load_font
 
     # Panels / UI
-    from pygame_core.panel_manager import PanelManager
-    from pygame_core.panel_loader import PanelLoader
-    from pygame_core.panel_loader_ext import PanelLoaderExt
+    from pygame_core.panel_manager import PanelManager as PanelManager
+    from pygame_core.panel_loader import PanelLoader as PanelLoader
+    from pygame_core.panel_loader_ext import PanelLoaderExt as PanelLoaderExt
     from pygame_core.panel_factory import (
-        make_factory, make_animated_factory, make_slider_factory, make_text_factory,
+        make_factory as make_factory, make_animated_factory as make_animated_factory,
+        make_slider_factory as make_slider_factory, make_text_factory as make_text_factory,
     )
-    from pygame_core.ui_widgets.text_object import TextObject
-    from pygame_core.ui_widgets.slider import Slider
-    from pygame_core.ui_widgets.input_box import InputBox
-    from pygame_core.ui_widgets.menu_controller import MenuController
+    from pygame_core.ui_widgets.text_object import TextObject as TextObject
+    from pygame_core.ui_widgets.slider import Slider as Slider
+    from pygame_core.ui_widgets.input_box import InputBox as InputBox
+    from pygame_core.ui_widgets.menu_controller import MenuController as MenuController
 
     # Utils
-    from pygame_core.utils import Anchorable, MouseInteractive, resolve_size
-    from pygame_core.math_utils import distance, angle_between_points, angle_between_delta
+    from pygame_core.utils import (
+        Anchorable as Anchorable, MouseInteractive as MouseInteractive, resolve_size as resolve_size,
+    )
+    from pygame_core.math_utils import (
+        distance as distance, angle_between_points as angle_between_points,
+        angle_between_delta as angle_between_delta,
+    )
 
     # Persistence / world data
-    from pygame_core.save_store import SaveStore
-    from pygame_core.database import Database
-    from pygame_core.spatial_grid import SpatialGrid
-    from pygame_core.tilemap import TiledMap
+    from pygame_core.save_store import SaveStore as SaveStore
+    from pygame_core.database import Database as Database
+    from pygame_core.spatial_grid import SpatialGrid as SpatialGrid
+    from pygame_core.tilemap import TiledMap as TiledMap
 
     # Networking
     from pygame_core.net.protocol import (
-        Protocol, ProtocolError, Codec, JSONCodec, TypedJSONCodec, PickleCodec,
+        Protocol as Protocol, ProtocolError as ProtocolError, Codec as Codec,
+        JSONCodec as JSONCodec, TypedJSONCodec as TypedJSONCodec, PickleCodec as PickleCodec,
     )
-    from pygame_core.net.transport import Connection, BaseClient, BaseServer
+    from pygame_core.net.transport import (
+        Connection as Connection, BaseClient as BaseClient, BaseServer as BaseServer,
+    )
 
 # name -> the submodule that actually defines it, for the lazy __getattr__
 # below. Grouped identically to the TYPE_CHECKING block above; keep both in

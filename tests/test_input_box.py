@@ -1,5 +1,6 @@
 """Unit tests for InputBox: a plain text-entry widget (click to focus, type,
 backspace, auto-widening)."""
+from __future__ import annotations
 
 import pygame
 

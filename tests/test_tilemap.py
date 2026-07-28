@@ -8,6 +8,7 @@ integration with an external library, which is exactly where mocking
 would hide the most likely kind of bug (a pytmx API assumption that's
 wrong).
 """
+from __future__ import annotations
 
 import pygame
 import pytest

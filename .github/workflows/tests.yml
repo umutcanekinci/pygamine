@@ -9,6 +9,24 @@ on:
     branches: [main]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    env:
+      UV_PYTHON: "3.12"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      # Deliberately narrow (F + I002 -- see pyproject.toml's [tool.ruff.lint]
+      # comment): real bugs, plus enforcing `from __future__ import
+      # annotations` repo-wide, not a full style/formatting pass.
+      - name: Lint (ruff)
+        run: uv run --group dev ruff check .
+
   test:
     runs-on: ubuntu-latest
     env:

@@ -5,6 +5,7 @@ No image files needed -- Slider draws with pygame.draw rather than loading
 assets, so these tests only need a display mode set (dummy SDL driver) for
 Surface/SRCALPHA operations.
 """
+from __future__ import annotations
 
 import pygame
 import pytest

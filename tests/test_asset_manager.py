@@ -1,6 +1,7 @@
 """Unit tests for AssetManager: the manifest-driven asset registry every
 consuming project loads config/assets.yaml through.
 """
+from __future__ import annotations
 
 import pygame
 import pytest

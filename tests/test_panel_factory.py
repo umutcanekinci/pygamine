@@ -6,6 +6,7 @@ Builds a real AssetManager backed by real image/font files under tmp_path
 "asset"/"hover" config keys to ImagePath objects before calling the factory),
 rather than mocking asset resolution.
 """
+from __future__ import annotations
 
 import os
 

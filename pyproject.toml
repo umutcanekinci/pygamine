@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pygame-core"
-version = "0.3.0"
+version = "0.3.1"
 description = "Shared pygame utilities for personal game projects"
 readme = "README.md"
 authors = [{ name = "Umutcan Ekinci", email = "umutcannekinci@gmail.com" }]
@@ -28,10 +28,29 @@ classifiers = [
 include = ["pygame_core*"]
 
 [dependency-groups]
-dev = ["pytest>=8"]
+dev = ["pytest>=8", "ruff>=0.8"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 markers = [
     "integration: real-socket loopback tests (slower)",
 ]
+
+[tool.ruff.lint]
+# Deliberately narrow: F (pyflakes -- real bugs like unused imports/vars)
+# and I002 specifically (only the required-imports check below, not all of
+# I -- I001 would additionally enforce import *sort order* repo-wide, a
+# much bigger reformatting pass this isn't about). Not E/W (pycodestyle)
+# either, which would flag ~200 long lines across tests/ that were a
+# deliberate style choice, not an oversight.
+select = ["F", "I002"]
+
+[tool.ruff.lint.isort]
+# Enforced repo-wide, not just where a type hint would otherwise need it
+# (ruff's semantic FA rules find nothing on this project's Python 3.12+
+# floor) -- consistency previously enforced this way, this document caught
+# a real cross-project break once already (see CLAUDE.md's pygame_core
+# bump note): a Transform self-referencing type hint needed this import to
+# evaluate lazily, and it only worked locally by accident because that one
+# machine's Python defers annotation evaluation by default anyway.
+required-imports = ["from __future__ import annotations"]

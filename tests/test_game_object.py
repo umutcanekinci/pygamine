@@ -2,9 +2,9 @@
 invoke_repeating scheduling, the component system, and per-frame dispatch
 (handle_event/update/draw) respecting both .active and Behaviour.enabled.
 """
+from __future__ import annotations
 
 import pygame
-import pytest
 
 from pygame_core.ecs.components.component import Behaviour, Component
 from pygame_core.ecs.components.transform import Transform

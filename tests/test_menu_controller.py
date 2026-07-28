@@ -6,9 +6,9 @@ touches: .rect, .focused, ._hovered, ._renderer, .is_mouse_over(),
 ._active_surface) rather than a real HoverableStateObject, which would
 pull in asset loading unrelated to this controller's own logic.
 """
+from __future__ import annotations
 
 import pygame
-import pytest
 
 from pygame_core.ui_widgets.menu_controller import MenuController
 

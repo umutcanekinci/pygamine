@@ -16,13 +16,11 @@ class MouseInteractive:
     # Press-tracking instance state
     _pressed: bool = False
 
-    def is_mouse_over(self, mouse_pos):
+    def is_mouse_over(self, mouse_pos) -> bool:
         rect = self.parent.rect + self.rect if hasattr(self, "parent") else self.rect
         return mouse_pos is not None and rect.collidepoint(mouse_pos) and self.visible
 
-    def is_clicked(self, event, mouse_pos):
-        pressed = getattr(self, "_pressed", False)
-
+    def is_clicked(self, event, mouse_pos) -> bool:
         """Returns True: mouse was pressed AND released over this object."""
         if not self.visible:
             self._pressed = False
@@ -40,7 +38,7 @@ class MouseInteractive:
 
         return False
 
-def resolve_size(size, window_size):
+def resolve_size(size, window_size) -> tuple:
     if size == "WINDOW":
         return tuple(window_size)
     if isinstance(size, list) and len(size) == 2:
@@ -75,7 +73,7 @@ class Anchorable:
     """
 
     @staticmethod
-    def resolve_pos(pos, parent_size, obj_size, anchor: str = "top-left"):
+    def resolve_pos(pos, parent_size, obj_size, anchor: str = "top-left") -> tuple:
         x, y = pos
         if anchor == "top-left":
             if x == "CENTER": x = (parent_size[0] - obj_size[0]) / 2

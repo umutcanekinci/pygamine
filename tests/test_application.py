@@ -7,6 +7,7 @@ integration-style test of the loop wiring itself. sys.exit and pygame.quit
 are monkeypatched wherever exit() is exercised, since calling them for real
 would tear down the shared pygame session for every later test in the suite.
 """
+from __future__ import annotations
 
 import os
 import sys

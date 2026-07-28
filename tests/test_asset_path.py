@@ -1,6 +1,7 @@
 """Unit tests for AssetPath and its ImagePath/FontPath/SoundPath subclasses:
 the path-construction logic AssetManager builds every asset reference from.
 """
+from __future__ import annotations
 
 import os
 

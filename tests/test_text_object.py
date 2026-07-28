@@ -1,6 +1,7 @@
 """Unit tests for TextObject: a GameObject-based text label with optional
 multi-state auto-sync to a parent's state/hover flags.
 """
+from __future__ import annotations
 
 import pygame
 import pytest

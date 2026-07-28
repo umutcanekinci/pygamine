@@ -1,6 +1,7 @@
 """Unit tests for AnimatedSprite and AnimatedSpriteFactory: a GameObject
 preconfigured with SpriteRenderer2D + Animator for sheet-based animation.
 """
+from __future__ import annotations
 
 import pygame
 import pytest

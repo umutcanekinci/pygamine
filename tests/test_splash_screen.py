@@ -5,6 +5,7 @@ itself intercepts to bail out early).
 Timing is driven through the fake_ticks fixture (patches
 pygame.time.get_ticks) for deterministic, instant tests.
 """
+from __future__ import annotations
 
 import pygame
 import pytest

@@ -303,6 +303,42 @@ class Application:
         self.set_resolution(new_size)
         return new_size
 
+    # ── window settings persistence ─────────────────────────────────────
+    #
+    # The window-mode/resolution slice of a SaveStore-style settings dict --
+    # deliberately just this, with no opinion on audio/gameplay settings a
+    # project also wants to persist alongside it. Extracted after chokepoint
+    # and standoff both grew the exact same three methods independently.
+
+    def restore_window_settings(self, saved_settings: dict) -> None:
+        """Applies a saved window mode/size on top of __init__'s default
+        (always exclusive fullscreen). set_resolution() only resizes
+        immediately if already windowed (mode and resolution are
+        independent settings) -- called here while still in the just-
+        constructed default fullscreen, it just remembers the size for
+        whichever mode is applied next, below. Harmless on platforms with
+        no windowing concept (e.g. Android): it just re-affirms fullscreen."""
+        if "window_size" in saved_settings:
+            self.set_resolution(tuple(saved_settings["window_size"]))
+        mode = saved_settings.get("window_mode", "fullscreen")
+        mode_methods = {"fullscreen": self.full_screen, "borderless": self.borderless_full_screen, "windowed": self.minimize}
+        mode_methods.get(mode, self.full_screen)()
+
+    def window_settings(self) -> dict:
+        """The window-mode/resolution portion of a settings dict, for
+        SaveStore-style persistence -- pair with restore_window_settings()
+        to round-trip. Merge this into a project's own larger settings
+        dict (audio, gameplay, ...) before saving, e.g.
+        `store.save({**app.window_settings(), "sfx_volume": ...})`."""
+        return {"window_mode": self._window_mode, "window_size": list(self.resolution)}
+
+    def reset_window_settings(self) -> None:
+        """Restores window mode/resolution to Application's own defaults
+        (exclusive fullscreen, no resolution override) -- pair with a
+        project's own audio/gameplay reset logic for a full settings reset."""
+        self.clear_resolution_override()
+        self.full_screen()
+
     def _fit_rect(self, dst_size: tuple[int, int]) -> pygame.Rect:
         """Largest rect that fits dst_size while preserving self.window's
         aspect ratio, centered inside it. Only meaningful under

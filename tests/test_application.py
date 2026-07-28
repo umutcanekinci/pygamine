@@ -450,6 +450,83 @@ def test_cycle_resolution_wraps_around_in_both_directions():
     assert back == options[(options.index(starting) - 1) % len(options)]
 
 
+# ── window settings persistence (restore/window_settings/reset) ────────
+#
+# Extracted after chokepoint and standoff both grew the exact same three
+# methods independently around a SaveStore-backed settings dict.
+
+
+def test_window_settings_reports_the_current_mode_and_resolution():
+    app = _TrackedApp()
+    app.minimize()
+
+    settings = app.window_settings()
+
+    assert settings == {"window_mode": "windowed", "window_size": list(app.resolution)}
+
+
+def test_restore_window_settings_applies_a_saved_windowed_mode_and_size():
+    app = _TrackedApp()
+    _pin_dimensions(app, minimized=(320, 240), full_screen=(1920, 1080))
+
+    app.restore_window_settings({"window_mode": "windowed", "window_size": [640, 480]})
+
+    assert app._window_mode == "windowed"
+    assert app.resolution == (640, 480)
+    assert app.display_surface.get_size() == (640, 480)
+
+
+def test_restore_window_settings_applies_a_saved_borderless_mode():
+    app = _TrackedApp()
+
+    app.restore_window_settings({"window_mode": "borderless"})
+
+    assert app._window_mode == "borderless"
+
+
+def test_restore_window_settings_defaults_to_fullscreen_when_nothing_saved():
+    app = _TrackedApp()
+
+    app.restore_window_settings({})
+
+    assert app._window_mode == "fullscreen"
+
+
+def test_restore_window_settings_defaults_to_fullscreen_for_an_unknown_mode():
+    app = _TrackedApp()
+
+    app.restore_window_settings({"window_mode": "some_future_mode"})
+
+    assert app._window_mode == "fullscreen"
+
+
+def test_window_settings_round_trips_through_restore_window_settings():
+    app = _TrackedApp()
+    _pin_dimensions(app, minimized=(320, 240), full_screen=(1920, 1080))
+    app.set_resolution((800, 600))
+    app.minimize()
+    saved = app.window_settings()
+
+    app2 = _TrackedApp()
+    _pin_dimensions(app2, minimized=(320, 240), full_screen=(1920, 1080))
+    app2.restore_window_settings(saved)
+
+    assert app2._window_mode == app._window_mode
+    assert app2.resolution == app.resolution
+
+
+def test_reset_window_settings_returns_to_fullscreen_with_no_override():
+    app = _TrackedApp()
+    app.set_resolution((640, 480))
+    app.minimize()
+    assert app._window_mode == "windowed"
+
+    app.reset_window_settings()
+
+    assert app._window_mode == "fullscreen"
+    assert app._resolution_override is None
+
+
 # ── _handle_core_event: debug toggle, F11, escape/quit -> exit ──────────
 
 

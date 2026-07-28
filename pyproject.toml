@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pygame-core"
-version = "0.4.1"
+version = "0.5.0"
 description = "Shared pygame utilities for personal game projects"
 readme = "README.md"
 authors = [{ name = "Umutcan Ekinci", email = "umutcannekinci@gmail.com" }]

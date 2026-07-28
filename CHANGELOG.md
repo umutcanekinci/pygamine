@@ -13,6 +13,17 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.5.0] — 2026-07-28
+
+- **Added** `Application.restore_window_settings(saved_settings)`,
+  `.window_settings()`, and `.reset_window_settings()` -- the window-mode/
+  resolution slice of a `SaveStore`-style settings dict, extracted after
+  chokepoint and standoff both independently grew the exact same three
+  private methods (`_restore_window_mode`/`_save_settings`/
+  `_reset_settings`) around this. Deliberately has no opinion on
+  audio/gameplay settings a project also wants to persist alongside it --
+  merge `window_settings()`'s dict into a larger one before saving.
+
 ## [0.4.1] — 2026-07-28
 
 - **Fixed** a real regression from 0.4.0, caught immediately by a consumer's

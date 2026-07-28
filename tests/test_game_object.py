@@ -311,6 +311,33 @@ def test_image_reflects_a_later_set_image_call():
     assert go.image is second
 
 
+def test_image_is_directly_settable_without_a_sprite_renderer():
+    """Regression test: some entities manage their own image directly with
+    no SpriteRenderer2D at all (e.g. one rendered straight from text) and
+    expect a plain `self.image = ...` assignment to just work -- image
+    used to be a read-only property, which broke every one of them the
+    instant this property was added (AttributeError: no setter)."""
+    go = GameObject()
+    surface = pygame.Surface((6, 6))
+
+    go.image = surface
+
+    assert go.image is surface
+
+
+def test_directly_set_image_takes_priority_over_the_sprite_renderer():
+    from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
+
+    go = GameObject()
+    renderer = go.add_component(SpriteRenderer2D)
+    renderer.set_image(pygame.Surface((4, 4)))
+
+    own_image = pygame.Surface((9, 9))
+    go.image = own_image
+
+    assert go.image is own_image
+
+
 # ── handle_event / update / draw dispatch ──────────────────────────────
 
 

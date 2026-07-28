@@ -26,6 +26,7 @@ class GameObject:
         self.rect: Transform = Transform()
         self.rect.game_object = self
         self._components: dict[str, Component] = {'Transform': self.rect}
+        self._image: pygame.Surface | None = None
 
     # ── active / hierarchy ───────────────────────────────────────────────────
 
@@ -118,13 +119,25 @@ class GameObject:
 
     @property
     def image(self) -> pygame.Surface | None:
-        """Default `Drawable.image` (see camera.py): whatever the attached
-        SpriteRenderer2D is currently showing, or None without one. Exists
-        so Camera.draw() never has to know about components or rotation --
-        override this property (not Camera) for an entity that switches
-        between multiple images, e.g. a rotated variant of its base sprite."""
+        """Default `Drawable.image` (see camera.py). Settable, backed by
+        `_image` -- some entities manage their own image directly (e.g. one
+        rendered straight from text, with no SpriteRenderer2D involved at
+        all) and expect a plain `self.image = ...` assignment to just work,
+        the way it always has; setting it here takes priority over the
+        component. Falls back to whatever the attached SpriteRenderer2D is
+        currently showing if `_image` was never explicitly set, or None
+        with neither. Exists so Camera.draw() never has to know about
+        components or rotation -- override this property (not Camera) for
+        an entity that switches between multiple images, e.g. a rotated
+        variant of its base sprite."""
+        if self._image is not None:
+            return self._image
         renderer = self.get_component(SpriteRenderer2D)
         return renderer.image if renderer is not None else None
+
+    @image.setter
+    def image(self, value: pygame.Surface | None) -> None:
+        self._image = value
 
     def handle_event(self, event: pygame.event.Event, mouse_position) -> None:
         if not self.active:

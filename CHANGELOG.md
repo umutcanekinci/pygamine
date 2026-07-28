@@ -13,6 +13,18 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.4.1] — 2026-07-28
+
+- **Fixed** a real regression from 0.4.0, caught immediately by a consumer's
+  own test suite: `GameObject.image` was a read-only property, which broke
+  every entity that manages its own image directly with no `SpriteRenderer2D`
+  involved at all (e.g. one rendered straight from text) and expects a plain
+  `self.image = ...` assignment to keep working -- `AttributeError: property
+  'image' of 'GameObject' object has no setter`. `image` is now a full
+  property backed by `_image`: a direct assignment takes priority over the
+  `SpriteRenderer2D` fallback, exactly matching the pre-0.4.0 behavior for
+  anything that never explicitly sets it.
+
 ## [0.4.0] — 2026-07-28
 
 - **Changed** (breaking): `Camera.draw(surface, entity)` now reads `entity.image`

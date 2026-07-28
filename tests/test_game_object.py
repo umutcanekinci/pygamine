@@ -278,6 +278,39 @@ def test_get_component_returns_none_for_unregistered_type():
     assert go.get_component(_Unregistered) is None
 
 
+# ── image (default Drawable.image -- see camera.py) ─────────────────────
+
+
+def test_image_is_none_without_a_sprite_renderer():
+    go = GameObject()
+    assert go.image is None
+
+
+def test_image_resolves_to_the_sprite_renderers_image():
+    from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
+
+    go = GameObject()
+    renderer = go.add_component(SpriteRenderer2D)
+    surface = pygame.Surface((4, 4))
+    renderer.set_image(surface)
+
+    assert go.image is surface
+
+
+def test_image_reflects_a_later_set_image_call():
+    from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
+
+    go = GameObject()
+    renderer = go.add_component(SpriteRenderer2D)
+    first = pygame.Surface((4, 4))
+    renderer.set_image(first)
+    assert go.image is first
+
+    second = pygame.Surface((8, 8))
+    renderer.set_image(second)
+    assert go.image is second
+
+
 # ── handle_event / update / draw dispatch ──────────────────────────────
 
 

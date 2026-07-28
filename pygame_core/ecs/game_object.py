@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Callable, TypeVar, cast
 from pygame_core.ecs.components.component import Component, Behaviour
 from pygame_core.ecs.components.transform import Transform
+from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
 import pygame
 
 C = TypeVar("C", bound=Component)
@@ -114,6 +115,16 @@ class GameObject:
 
     def get_component(self, component_type: type[C]) -> C | None:
         return cast("C | None", self._components.get(component_type.__name__))
+
+    @property
+    def image(self) -> pygame.Surface | None:
+        """Default `Drawable.image` (see camera.py): whatever the attached
+        SpriteRenderer2D is currently showing, or None without one. Exists
+        so Camera.draw() never has to know about components or rotation --
+        override this property (not Camera) for an entity that switches
+        between multiple images, e.g. a rotated variant of its base sprite."""
+        renderer = self.get_component(SpriteRenderer2D)
+        return renderer.image if renderer is not None else None
 
     def handle_event(self, event: pygame.event.Event, mouse_position) -> None:
         if not self.active:

@@ -34,7 +34,7 @@ if TYPE_CHECKING:
     # Application / window management
     from pygame_core.application import Application as Application
     from pygame_core.mouse import Mouse as Mouse
-    from pygame_core.camera import Camera as Camera
+    from pygame_core.camera import Camera as Camera, Drawable as Drawable
     from pygame_core.debug import Debug as Debug
     from pygame_core.splash_screen import SplashScreen as SplashScreen
 
@@ -114,6 +114,7 @@ _EXPORTS: dict[str, str] = {
     "Application": "pygame_core.application",
     "Mouse": "pygame_core.mouse",
     "Camera": "pygame_core.camera",
+    "Drawable": "pygame_core.camera",
     "Debug": "pygame_core.debug",
     "SplashScreen": "pygame_core.splash_screen",
     # ECS core

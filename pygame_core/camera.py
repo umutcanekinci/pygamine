@@ -1,16 +1,31 @@
 from __future__ import annotations
 
+from typing import Protocol, runtime_checkable
+
 import pygame
 from pygame.math import Vector2
 
 from pygame_core.image import scale_by
-from pygame_core.ecs.components.sprite_renderer2d import SpriteRenderer2D
 
 EDGE_SCROLL_ZONE = 30
 CAMERA_SPEED     = 10
 ZOOM_STEP        = 0.10
 ZOOM_MIN         = 0.5
 ZOOM_MAX         = 2.0
+
+
+@runtime_checkable
+class Drawable(Protocol):
+    """What Camera.draw() needs from an entity -- deliberately just this,
+    so Camera never has to know about ECS components, rotation state, or
+    any other entity-specific concept. GameObject already satisfies this
+    via its own `.image` property (see ecs/game_object.py, which resolves
+    to the attached SpriteRenderer2D's image by default); an entity that
+    switches between multiple images (e.g. a rotated variant of its base
+    sprite) overrides that property itself instead of Camera guessing via
+    getattr(entity, 'is_rotated', False) the way this used to work."""
+    rect: pygame.Rect
+    image: pygame.Surface
 
 
 class Camera:
@@ -51,9 +66,8 @@ class Camera:
 
     # ── drawing ───────────────────────────────────────────────────────────────
 
-    def draw(self, surface, entity) -> None:
-        image = entity.rotated_image if getattr(entity, 'is_rotated', False) else entity.get_component(SpriteRenderer2D).image
-        scaled = self.scale_image(image)
+    def draw(self, surface: pygame.Surface, entity: Drawable) -> None:
+        scaled = self.scale_image(entity.image)
         center = self.world_to_screen(entity.rect.center)
         rect   = scaled.get_rect(center=(int(center.x), int(center.y)))
         surface.blit(scaled, rect)

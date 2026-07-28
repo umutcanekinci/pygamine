@@ -125,23 +125,47 @@ def test_draw_blits_sprite_renderer_image_centered_at_world_position(camera):
     assert surface.get_at((0, 0)) == (0, 255, 0, 255)
 
 
-def test_draw_uses_rotated_image_when_entity_is_rotated(camera):
-    class _Rotated:
-        is_rotated = True
-
+def test_draw_uses_whatever_the_entitys_own_image_property_returns(camera):
+    """draw() only ever reads entity.image -- it has no opinion on *why*
+    that might differ from a plain SpriteRenderer2D's image (rotation,
+    an animation frame, ...); that choice belongs entirely to the entity,
+    e.g. a RotatableObject-style class overriding GameObject's default
+    `image` property (see ecs/game_object.py) to switch between a rotated
+    variant and its base sprite."""
+    class _CustomImage:
         def __init__(self):
-            self.rotated_image = pygame.Surface((10, 10))
-            self.rotated_image.fill((0, 0, 255))
+            self.image = pygame.Surface((10, 10))
+            self.image.fill((0, 0, 255))
             self.rect = pygame.Rect(0, 0, 10, 10)
             self.rect.center = (50, 50)
 
-    entity = _Rotated()
+    entity = _CustomImage()
     surface = pygame.Surface((800, 600))
     surface.fill((0, 255, 0))
 
     camera.draw(surface, entity)
 
     assert surface.get_at((50, 50)) == (0, 0, 255, 255)
+
+
+def test_draw_uses_the_game_objects_default_image_property(camera):
+    """GameObject's own `.image` property (the default Drawable
+    implementation) resolves to its SpriteRenderer2D's image -- draw()
+    doesn't need to know a component is involved at all."""
+    entity = GameObject()
+    entity.rect.size = (10, 10)
+    entity.rect.center = (60, 60)
+    renderer = entity.add_component(SpriteRenderer2D)
+    image = pygame.Surface((10, 10))
+    image.fill((255, 0, 255))
+    renderer.set_image(image)
+
+    surface = pygame.Surface((800, 600))
+    surface.fill((0, 255, 0))
+
+    camera.draw(surface, entity)
+
+    assert surface.get_at((60, 60)) == (255, 0, 255, 255)
 
 
 # ── handle_event: zoom via mouse wheel ──────────────────────────────────

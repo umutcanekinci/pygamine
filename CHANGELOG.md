@@ -13,6 +13,23 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.4.0] — 2026-07-28
+
+- **Changed** (breaking): `Camera.draw(surface, entity)` now reads `entity.image`
+  directly instead of guessing between `entity.rotated_image` (when
+  `entity.is_rotated`) and `entity.get_component(SpriteRenderer2D).image` --
+  `Camera` no longer imports or knows about `SpriteRenderer2D`, ECS
+  components, or rotation at all. `GameObject` gained a default `image`
+  property (resolves to the attached `SpriteRenderer2D`'s image, or `None`
+  without one) satisfying the new `Drawable` protocol for free; an entity
+  that switches between multiple images (a rotated variant of its base
+  sprite, an animation frame, ...) overrides that property itself instead
+  of `Camera` special-casing `is_rotated`/`rotated_image` by name.
+  Consumers with their own rotating/multi-image entities (e.g. chokepoint's
+  `RotatableObject`) need to add an `image` property override before
+  bumping past this version, or rotated sprites will silently render
+  un-rotated instead of raising.
+
 ## [0.3.1] — 2026-07-28
 
 - **Added** a CI lint job (`ruff check .`) and a `[tool.ruff.lint]` config,

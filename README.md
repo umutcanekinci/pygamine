@@ -91,7 +91,7 @@ Requires Python 3.12+ and `pygame-ce`.
 
 ```python
 from pygame_core.sprite_sheet import SpriteSheet
-from pygame_core.ecs.components.animator import AnimationClip
+from pygame_core.ecs.components.animation_clip import AnimationClip
 from pygame_core.ecs.animated_sprite import AnimatedSprite
 
 frames = SpriteSheet.from_path("coin_strip4.png").strip(4)

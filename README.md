@@ -165,7 +165,7 @@ rows = db.execute_safely(
 )
 ```
 
-`execute_safely` handles connect/commit/disconnect in one call; use `connect/execute/commit/disconnect` directly when you need to batch operations.
+`execute_safely` handles connect/commit/disconnect in one call; use `connect/execute/commit/disconnect` directly when you need to batch operations. Any failure raises `pygamine.database.DatabaseError` — catch it (or let it propagate) rather than checking a return value.
 
 ## Adding a new module
 

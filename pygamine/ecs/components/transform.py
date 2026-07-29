@@ -35,7 +35,7 @@ class Transform(Component, pygame.Rect, Anchorable):
         assert isinstance(parent, Transform), "Parent must be a Transform."
         self.parent = parent
 
-    def update(self):  # type: ignore[override]
+    def update(self):
         # Component lifecycle hook; intentionally shadows pygame.Rect.update,
         # which is unused on Transform (positions are set via topleft/set_position).
         ...

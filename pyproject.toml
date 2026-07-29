@@ -4,9 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pygamine"
-version = "0.6.0"
+version = "0.7.0"
 description = "Shared pygame utilities for personal game projects"
 readme = "README.md"
+license = { file = "LICENSE" }
 authors = [{ name = "Umutcan Ekinci", email = "umutcannekinci@gmail.com" }]
 requires-python = ">=3.12"
 dependencies = [
@@ -20,15 +21,23 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
     "Topic :: Games/Entertainment",
     "Topic :: Software Development :: Libraries",
+    "Typing :: Typed",
 ]
 
 [tool.setuptools.packages.find]
 include = ["pygamine*"]
 
+[tool.setuptools.package-data]
+# PEP 561 marker -- lets type checkers (mypy/pyright) pick up this
+# package's inline type hints when it's installed, not just when it's
+# vendored on sys.path inside the same checkout being type-checked.
+pygamine = ["py.typed"]
+
 [dependency-groups]
-dev = ["pytest>=8", "ruff>=0.8"]
+dev = ["pytest>=8", "ruff>=0.8", "mypy>=1.13", "types-PyYAML"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -44,6 +53,21 @@ markers = [
 # either, which would flag ~200 long lines across tests/ that were a
 # deliberate style choice, not an oversight.
 select = ["F", "I002"]
+
+[tool.mypy]
+python_version = "3.12"
+# Deliberately permissive, mirroring [tool.ruff.lint]'s "start narrow"
+# approach: no --strict, untyped function bodies aren't checked yet. The
+# goal right now is catching real type errors in already-annotated code
+# (e.g. a `Surface | None` dereferenced without narrowing it first), not
+# demanding a full annotation pass across the codebase in one go.
+warn_unused_ignores = true
+warn_redundant_casts = true
+
+[[tool.mypy.overrides]]
+# No published stubs (and no types-pytmx package) as of this writing.
+module = ["pytmx.*"]
+ignore_missing_imports = true
 
 [tool.ruff.lint.isort]
 # Enforced repo-wide, not just where a type hint would otherwise need it

@@ -7,7 +7,7 @@ import sqlite3
 
 import pytest
 
-from pygamine.database import Database
+from pygamine.database import Database, DatabaseError
 
 
 @pytest.fixture(autouse=True)
@@ -22,7 +22,7 @@ def _isolate_cwd(tmp_path, monkeypatch):
 
 def test_connect_creates_the_databases_folder(tmp_path):
     db = Database("test")
-    assert db.connect() is True
+    db.connect()  # must not raise
     assert (tmp_path / "databases").is_dir()
     assert (tmp_path / "databases" / "test.db").exists()
 
@@ -30,7 +30,7 @@ def test_connect_creates_the_databases_folder(tmp_path):
 def test_connect_reuses_an_existing_databases_folder(tmp_path):
     (tmp_path / "databases").mkdir()
     db = Database("test")
-    assert db.connect() is True  # must not raise just because the dir already exists
+    db.connect()  # must not raise just because the dir already exists
 
 
 def test_connect_sets_a_real_sqlite_connection():
@@ -39,13 +39,14 @@ def test_connect_sets_a_real_sqlite_connection():
     assert isinstance(db.connection, sqlite3.Connection)
 
 
-def test_connect_returns_false_on_failure(monkeypatch):
+def test_connect_raises_databaseerror_on_failure(monkeypatch):
     def _raise(*args, **kwargs):
         raise sqlite3.OperationalError("simulated failure")
 
     monkeypatch.setattr(sqlite3, "connect", _raise)
     db = Database("test")
-    assert db.connect() is False
+    with pytest.raises(DatabaseError):
+        db.connect()
 
 
 # ── get_cursor ──────────────────────────────────────────────────────────
@@ -77,21 +78,19 @@ def test_execute_runs_real_sql():
     assert rows == [(42,)]
 
 
-def test_execute_invalid_sql_raises_systemexit():
+def test_execute_invalid_sql_raises_databaseerror():
     db = Database("test")
     db.connect()
-    with pytest.raises(SystemExit):
+    with pytest.raises(DatabaseError):
         db.execute("THIS IS NOT VALID SQL")
 
 
-def test_execute_before_connect_raises_systemexit_not_assertion_error():
-    """get_cursor() raises AssertionError when unconnected, but execute()'s
-    own broad `except Exception` catches it (AssertionError is an Exception
-    subclass) and converts it into sys.exit() -- so this surfaces as
-    SystemExit, not AssertionError, which is easy to miss if you only read
-    get_cursor() in isolation."""
+def test_execute_before_connect_raises_assertion_error():
+    """execute()'s except clause only catches sqlite3.Error, so
+    get_cursor()'s AssertionError (a programming-error precondition, not a
+    database failure) propagates unconverted."""
     db = Database("test")
-    with pytest.raises(SystemExit):
+    with pytest.raises(AssertionError):
         db.execute("SELECT 1")
 
 
@@ -128,13 +127,24 @@ def test_execute_safely_disconnects_after_each_call():
         db.get_cursor()
 
 
-def test_execute_safely_exits_when_connect_fails(monkeypatch):
+def test_execute_safely_disconnects_even_when_the_query_fails():
+    db = Database("test")
+    db.connect()
+    db.disconnect()
+    with pytest.raises(DatabaseError):
+        db.execute_safely("THIS IS NOT VALID SQL")
+    # the connection execute_safely opened must have been closed, not leaked
+    with pytest.raises(sqlite3.ProgrammingError):
+        db.get_cursor()
+
+
+def test_execute_safely_raises_databaseerror_when_connect_fails(monkeypatch):
     def _raise(*args, **kwargs):
         raise sqlite3.OperationalError("simulated failure")
 
     monkeypatch.setattr(sqlite3, "connect", _raise)
     db = Database("test")
-    with pytest.raises(SystemExit):
+    with pytest.raises(DatabaseError):
         db.execute_safely("SELECT 1")
 
 

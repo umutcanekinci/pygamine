@@ -33,7 +33,7 @@ class MouseInteractive:
 
         if event.type == pygame.MOUSEBUTTONUP:
             was_pressed = self._pressed
-            self._pressed = False  # her zaman reset
+            self._pressed = False  # always reset
             return was_pressed and event.button == 1 and self.is_mouse_over(mouse_pos)
 
         return False

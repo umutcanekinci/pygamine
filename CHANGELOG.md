@@ -13,6 +13,45 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.7.0] — 2026-07-29
+
+- **Changed** (breaking): `Database.connect()`/`.execute()` no longer
+  `print()` and `sys.exit()` the whole process on failure -- they raise the
+  new `pygamine.database.DatabaseError` instead, so a consumer can catch,
+  log, or recover instead of the process dying mid-frame. `connect()` also
+  no longer returns a `bool`; call it and handle `DatabaseError` (or let it
+  propagate) instead of checking a return value. `execute_safely()` now
+  disconnects in a `finally`, so a failed query no longer leaks an open
+  connection the way a mid-call `sys.exit()` used to skirt around by
+  killing the process before it mattered. Paths are now built with
+  `pathlib.Path` instead of string concatenation, matching `SaveStore`'s
+  convention; `Database.__init__` also gained an optional `directory`
+  parameter (defaults to `"databases"`, the prior hardcoded value) for the
+  same reason `SaveStore` has one.
+- **Added** a `LICENSE` file (MIT) -- the package is public and
+  pip-installable from GitHub but never actually declared a license.
+- **Added** a `py.typed` marker (PEP 561) plus `[tool.setuptools.package-data]`
+  so type checkers pick up this package's inline hints when it's installed,
+  not just when it's vendored on `sys.path` inside the same checkout being
+  checked.
+- **Added** a `typecheck` CI job (`mypy`), deliberately permissive to match
+  `[tool.ruff.lint]`'s "start narrow" precedent: no `--strict`, untyped
+  function bodies aren't checked yet. Fixed the handful of real issues it
+  surfaced: `Application`'s `self.window: Surface | None` dereferenced
+  without narrowing in `_fit_rect`/`_sync_mouse_scale`/`_present`/
+  `draw_mouse` (added `assert self.window is not None` guards -- true for
+  the whole lifetime of these calls, since `__init__` always populates it
+  before any of them can run), `Mouse.position` inferred as `tuple[int,
+  int]` from its `(0, 0)` initializer despite being assigned floats in
+  `update()`, and a stale `# type: ignore[override]` on
+  `Transform.update()` that mypy's default (non-strict) mode never
+  actually needed.
+- **Fixed** two stray Turkish-language fragments left in comments/docstrings
+  (`asset_path.py`, `utils.py`) -- translated to English.
+- **Changed** `.idea/` project files are no longer tracked in the repo
+  (IDE-local config, not shared-library source) -- added to `.gitignore`
+  and untracked.
+
 ## [0.6.0] — 2026-07-29
 
 - **Changed** (breaking): renamed the package/distribution/repository from

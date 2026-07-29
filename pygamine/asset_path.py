@@ -5,7 +5,7 @@ from typing import Union
 
 
 class AssetPath(os.PathLike):
-    """Game asset path — string-compatible ama type-safe."""
+    """Game asset path — string-compatible but type-safe."""
 
     def __init__(self, name: str, folder: str = "", extension: str = "png",
                  base: str = "assets"):

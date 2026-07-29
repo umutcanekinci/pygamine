@@ -344,6 +344,7 @@ class Application:
         aspect ratio, centered inside it. Only meaningful under
         fixed_aspect=True -- self.window's aspect always matches dst_size's
         otherwise, so this would just return the full dst_size rect."""
+        assert self.window is not None, "self.window is only None before __init__ finishes"
         dst_w, dst_h = dst_size
         src_w, src_h = self.window.get_size()
         scale = min(dst_w / src_w, dst_h / src_h)
@@ -353,6 +354,7 @@ class Application:
     def _sync_mouse_scale(self) -> None:
         if not self.mouse:
             return
+        assert self.window is not None, "self.window is only None before __init__ finishes"
         if self.fixed_aspect:
             rect = self._fit_rect(self.display_surface.get_size())
             self.mouse.scale = (self.window.get_width() / rect.width, self.window.get_height() / rect.height)
@@ -392,6 +394,7 @@ class Application:
             self._present()
 
     def _present(self) -> None:
+        assert self.window is not None, "self.window is only None before __init__ finishes"
         dst_size = self.display_surface.get_size()
 
         if self.fixed_aspect:
@@ -459,6 +462,7 @@ class Application:
         pass
 
     def draw_mouse(self) -> None:
+        assert self.window is not None, "self.window is only None before __init__ finishes"
         if self.mouse:
             self.mouse.draw(self.window)
 

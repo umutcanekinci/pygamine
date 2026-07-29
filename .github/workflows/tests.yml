@@ -27,6 +27,25 @@ jobs:
       - name: Lint (ruff)
         run: uv run --group dev ruff check .
 
+  typecheck:
+    runs-on: ubuntu-latest
+    env:
+      UV_PYTHON: "3.12"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      # Deliberately permissive (see pyproject.toml's [tool.mypy] comment):
+      # no --strict, untyped function bodies aren't checked yet. Catches
+      # real type errors in already-annotated code, not a full-codebase
+      # annotation mandate.
+      - name: Type check (mypy)
+        run: uv run --group dev mypy pygamine
+
   test:
     runs-on: ubuntu-latest
     env:

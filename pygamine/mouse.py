@@ -7,7 +7,7 @@ from pygamine.ecs.game_object import GameObject
 
 class Mouse:
     def __init__(self, tile_size=None) -> None:
-        self.position = (0, 0)
+        self.position: tuple[float, float] = (0, 0)
         self.tile_size = tile_size
         self.cursor: GameObject | None = None
         # physical (real OS window) -> logical (game's design resolution)

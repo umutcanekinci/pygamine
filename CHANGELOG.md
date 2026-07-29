@@ -13,6 +13,18 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.14.0] — 2026-07-29
+
+- **Added** a real Python version compatibility matrix (3.12/3.13/3.14) to
+  the `test` CI job -- `classifiers` has claimed all three since day one,
+  but CI only ever ran the one version pinned for lint/typecheck/coverage,
+  so that claim was never actually verified. Split into two jobs: `test`
+  (the new 3-version matrix, no coverage) and `coverage` (single pinned
+  3.12 run, still the one that generates/commits the badge -- coverage
+  numbers come from one canonical version, not the compatibility matrix).
+  Manually verified full suite (650 tests), ruff, and mypy all clean on
+  3.13 and 3.14 before adding the matrix, not just "it installs".
+
 ## [0.13.1] — 2026-07-29
 
 - **Fixed** a real regression from [0.13.0], caught immediately by a

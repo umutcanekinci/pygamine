@@ -48,14 +48,37 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # requires-python allows >=3.12; classifiers claim 3.12/3.13/3.14 --
+        # actually verify all three instead of only ever running the one
+        # pinned for the (single-version) coverage job below.
+        python-version: ["3.12", "3.13", "3.14"]
+    env:
+      UV_PYTHON: ${{ matrix.python-version }}
+      # Headless SDL so pygame.init() (via SpatialGrid's Rect construction)
+      # works with no display.
+      SDL_VIDEODRIVER: dummy
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Run tests
+        run: uv run --group dev pytest -q
+
+  coverage:
+    runs-on: ubuntu-latest
     permissions:
       contents: write  # only this job pushes the regenerated coverage badge
     env:
-      # Pin the interpreter so we always land on a Python with prebuilt
-      # pygame-ce wheels (project allows >=3.12).
+      # Pinned to one version -- coverage numbers/badge come from a single
+      # canonical run, not the compatibility matrix above.
       UV_PYTHON: "3.12"
-      # Headless SDL so pygame.init() (via SpatialGrid's Rect construction)
-      # works with no display.
       SDL_VIDEODRIVER: dummy
     steps:
       - uses: actions/checkout@v4

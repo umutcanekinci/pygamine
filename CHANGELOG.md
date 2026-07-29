@@ -13,6 +13,12 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.10.0] — 2026-07-29
+
+- **Added** `DatabaseError` to the curated top-level API (`from pygamine
+  import DatabaseError`) -- an omission from when `database.py` was
+  rewritten to raise it instead of `sys.exit()`ing.
+
 ## [0.9.0] — 2026-07-29
 
 - **Added** `pygamine.paths`: `resource_root()`/`resource_path()`, the

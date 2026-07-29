@@ -93,7 +93,7 @@ if TYPE_CHECKING:
 
     # Persistence / world data
     from pygamine.save_store import SaveStore as SaveStore
-    from pygamine.database import Database as Database
+    from pygamine.database import Database as Database, DatabaseError as DatabaseError
     from pygamine.spatial_grid import SpatialGrid as SpatialGrid
     from pygamine.tilemap import TiledMap as TiledMap
     from pygamine.paths import resource_root as resource_root, resource_path as resource_path
@@ -174,6 +174,7 @@ _EXPORTS: dict[str, str] = {
     # Persistence / world data
     "SaveStore": "pygamine.save_store",
     "Database": "pygamine.database",
+    "DatabaseError": "pygamine.database",
     "SpatialGrid": "pygamine.spatial_grid",
     "TiledMap": "pygamine.tilemap",
     "resource_root": "pygamine.paths",

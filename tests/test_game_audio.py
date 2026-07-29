@@ -202,3 +202,24 @@ def test_sound_manager_channels_are_independent_of_game_audio_channels(sound_pat
     SoundManager.play_sound(OTHER_CHANNEL_A, sound_path)
     assert mixer.Channel(MUSIC_CHANNEL).get_busy() is False
     assert mixer.Channel(SFX_CHANNEL).get_busy() is False
+
+
+def test_sound_manager_pause_then_unpause_round_trips_playback(sound_path):
+    SoundManager.play_sound(OTHER_CHANNEL_A, sound_path, loops=-1)
+    SoundManager.pause(OTHER_CHANNEL_A)
+    assert mixer.Channel(OTHER_CHANNEL_A).get_busy() is True  # paused, not stopped
+
+    SoundManager.unpause(OTHER_CHANNEL_A)
+    assert mixer.Channel(OTHER_CHANNEL_A).get_busy() is True
+
+
+# ── GameAudio built on SoundManager ──────────────────────────────────────
+
+
+def test_game_audio_play_sfx_delegates_to_sound_manager_sfx_channel(sound_path):
+    """GameAudio.play_sfx is SoundManager.play_sound(SFX_CHANNEL, ...) under
+    the hood -- playing directly via SoundManager on that channel and via
+    GameAudio must be indistinguishable to the mixer."""
+    GameAudio.play_sfx(sound_path)
+    assert mixer.Channel(SFX_CHANNEL).get_busy() is True
+    assert SoundManager.get_volume(SFX_CHANNEL) == pytest.approx(1.0, abs=0.01)

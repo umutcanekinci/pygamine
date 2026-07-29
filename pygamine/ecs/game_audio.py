@@ -1,7 +1,10 @@
 """Channel-based audio: music on channel 0 (looped), SFX on channel 1.
 
-Replaces both 2048's GameAudioMixin (channel-based, no pause/resume) and
-tower-defense's SoundManagerExtension (mixer.music-based, music-only).
+An opinionated, 2-channel convenience layer on top of SoundManager's generic
+per-channel primitives -- adds named music/sfx channels plus music
+pause/resume/toggle state SoundManager has no opinion on. Reach for
+SoundManager directly instead when a project needs more than these two
+channels (e.g. per-category SFX channels for independent volume control).
 """
 
 from __future__ import annotations
@@ -9,7 +12,7 @@ from __future__ import annotations
 import os
 from typing import Union
 
-from pygame import mixer
+from pygamine.ecs.sound_manager import SoundManager
 
 MUSIC_CHANNEL = 0
 SFX_CHANNEL   = 1
@@ -26,19 +29,19 @@ class GameAudio:
     # ── music ─────────────────────────────────────────────────────────────────
 
     def play_music(self, path: PathArg, loops: int = -1) -> None:
-        mixer.Channel(MUSIC_CHANNEL).play(mixer.Sound(str(path)), loops)
+        SoundManager.play_sound(MUSIC_CHANNEL, path, loops)
         self._music_paused = False
 
     def pause_music(self) -> None:
         if self._music_paused:
             return
-        mixer.Channel(MUSIC_CHANNEL).pause()
+        SoundManager.pause(MUSIC_CHANNEL)
         self._music_paused = True
 
     def resume_music(self) -> None:
         if not self._music_paused:
             return
-        mixer.Channel(MUSIC_CHANNEL).unpause()
+        SoundManager.unpause(MUSIC_CHANNEL)
         self._music_paused = False
 
     def toggle_music(self) -> None:
@@ -55,24 +58,20 @@ class GameAudio:
 
     @staticmethod
     def play_sfx(path: PathArg) -> None:
-        mixer.Channel(SFX_CHANNEL).play(mixer.Sound(str(path)))
+        SoundManager.play_sound(SFX_CHANNEL, path)
 
     # ── volume ────────────────────────────────────────────────────────────────
 
     @staticmethod
     def music_volume() -> float:
-        return mixer.Channel(MUSIC_CHANNEL).get_volume()
+        return SoundManager.get_volume(MUSIC_CHANNEL)
 
     @staticmethod
     def sfx_volume() -> float:
-        return mixer.Channel(SFX_CHANNEL).get_volume()
+        return SoundManager.get_volume(SFX_CHANNEL)
 
     def set_music_volume(self, volume: float) -> None:
-        self._set_channel_volume(MUSIC_CHANNEL, volume)
+        SoundManager.set_volume(MUSIC_CHANNEL, volume)
 
     def set_sfx_volume(self, volume: float) -> None:
-        self._set_channel_volume(SFX_CHANNEL, volume)
-
-    @staticmethod
-    def _set_channel_volume(channel: int, volume: float) -> None:
-        mixer.Channel(channel).set_volume(max(0.0, min(1.0, volume)))
+        SoundManager.set_volume(SFX_CHANNEL, volume)

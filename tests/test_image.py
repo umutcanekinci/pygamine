@@ -58,13 +58,6 @@ def test_load_image_zero_component_keeps_that_source_dimension(image_path):
     assert img.get_size() == (40, 40)  # width kept from source, height forced to 40
 
 
-def test_load_image_legacy_one_third_means_one_fifth_of_source(image_path):
-    """A literal 1/3 component is a legacy convention meaning 'one-fifth of
-    the source dimension on that axis', not literally a third."""
-    img = load_image(image_path, size=[1 / 3, 1 / 3])
-    assert img.get_size() == (40 // 5, 20 // 5)
-
-
 def test_load_image_explicit_size_scales_to_it(image_path):
     img = load_image(image_path, size=(80, 10))
     assert img.get_size() == (80, 10)

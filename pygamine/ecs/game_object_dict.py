@@ -1,7 +1,10 @@
 from __future__ import annotations
 
-import pygame
 from typing import Any
+
+import pygame
+
+from pygamine.ecs._dispatch import dispatch_draw, dispatch_handle_event, dispatch_update
 
 
 class GameObjectDict:
@@ -21,19 +24,10 @@ class GameObjectDict:
         return self._objects.values()
 
     def handle_event(self, event: pygame.event.Event, mouse_position) -> None:
-        for obj in self._objects.values():
-            if not hasattr(obj, "handle_event"): continue
-            if hasattr(obj, "active") and not obj.active: continue
-            obj.handle_event(event, mouse_position)
+        dispatch_handle_event(self._objects.values(), event, mouse_position)
 
     def update(self) -> None:
-        for obj in self._objects.values():
-            if not hasattr(obj, "update"): continue
-            if hasattr(obj, "active") and not obj.active: continue
-            obj.update()
+        dispatch_update(self._objects.values())
 
     def draw(self, surface) -> None:
-        for obj in self._objects.values():
-            if not hasattr(obj, "draw"): continue
-            if hasattr(obj, "active") and not obj.active: continue
-            obj.draw(surface)
+        dispatch_draw(self._objects.values(), surface)

@@ -13,6 +13,30 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.8.0] — 2026-07-29
+
+- **Changed** (breaking): `InputBox` now matches every other widget's
+  conventions (`StateObject`, `Slider`, `TextObject`) instead of predating
+  them -- it's `GameObject`-based and takes `parent`/`pos`/`size`/`anchor`
+  instead of raw `x, y, w, h`, and accepts a `font` instead of always
+  building `pygame.font.Font(None, 32)` on every keystroke. Focus state is
+  now `.focused` (was `.active`, which collided in meaning with
+  `GameObject.active`). Border color is exposed as `.border_color`; text
+  color is a fixed `text_color` instead of switching with focus state the
+  way the border does. Migration: `InputBox(x, y, w, h)` -> `InputBox(pos=(x,
+  y), size=(w, h))`.
+- **Changed** `GameAudio` no longer duplicates `SoundManager`'s
+  play/clamp-volume logic -- it's now a 2-channel (music/sfx) convenience
+  layer built on top of `SoundManager`'s generic per-channel primitives,
+  adding only the music pause/resume/toggle state SoundManager has no
+  opinion on. No public API change for either class. `SoundManager` gained
+  `pause(channel)`/`unpause(channel)` (previously only reachable through
+  `GameAudio`'s music-specific methods).
+- **Removed** `image.load_image`'s dead `1/3`-means-"one-fifth-of-source"
+  sentinel -- grepped every consumer project; nothing used it. It was a
+  fragile float-equality check on top of an already-undocumented legacy
+  convention.
+
 ## [0.7.0] — 2026-07-29
 
 - **Changed** (breaking): `Database.connect()`/`.execute()` no longer

@@ -10,7 +10,6 @@ def load_image(path, size=None, nine_slice: int = 0, return_size: bool = False):
 
     - size=None or (0, 0): return the original surface.
     - A zero component in `size` means 'keep the source dimension on that axis'.
-    - A 1/3 component means 'one-fifth of the source dimension' (legacy convention).
     - If nine_slice > 0, scale to size using 9-slice (corners pixel-perfect).
     """
     path_str = str(path)
@@ -28,8 +27,6 @@ def load_image(path, size=None, nine_slice: int = 0, return_size: bool = False):
 
     if size[0] == 0:   size[0] = img.get_width()
     if size[1] == 0:   size[1] = img.get_height()
-    if size[0] == 1 / 3: size[0] = img.get_width() // 5
-    if size[1] == 1 / 3: size[1] = img.get_height() // 5
 
     if nine_slice > 0:
         result = nine_slice_scale(img, (size[0], size[1]), nine_slice)

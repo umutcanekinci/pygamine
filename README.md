@@ -44,15 +44,15 @@ pygamine = { path = "src/pygamine", editable = true }
 
 This override only takes effect for a dependency `uv` actually resolves —
 i.e. it requires `"pygamine"` to also be listed under
-`[project.dependencies]`. As of this writing, none of the host projects
-add it there (`uv pip list` in each shows `pygame-ce`, never
-`pygamine`), so this block is currently inert boilerplate everywhere,
-copied from project to project without the matching dependency entry.
-The `sys.path` insertion above is what actually makes `import pygamine`
-work today in every one of them. If a host project wants the `uv.sources`
-override to do something, add `"pygamine"` to its own
-`[project.dependencies]` too — `uv sync` will then install this submodule
-in editable mode instead of relying on `sys.path` alone.
+`[project.dependencies]`. Every current host project does list it there,
+so `uv sync` installs this submodule in editable mode (`uv.lock` shows
+`source = { editable = "src/pygamine" }`) rather than relying on
+`sys.path` alone — the `sys.path` insertion above is still what makes
+`import pygamine` work for anything invoked without going through `uv`
+(e.g. a frozen PyInstaller build), so keep both. A host project that
+skips `"pygamine"` in `[project.dependencies]` gets an inert
+`[tool.uv.sources]` block — the override only ever matters alongside a
+matching dependency entry.
 
 ## Module map
 
@@ -76,6 +76,7 @@ in editable mode instead of relying on `sys.path` alone.
 | `database` | `Database` — thin SQLite wrapper, stores `.db` under `databases/` |
 | `save_store` | `SaveStore` — JSON-backed key-value persistence for settings/saves under `saves/`, atomic writes |
 | `tilemap` | `TiledMap` — Tiled `.tmx` loader (pytmx-backed): tile dims, object-group iteration, offscreen pre-render, camera-aware draw |
+| `paths` | `resource_root`, `resource_path` — cwd anchor that works from source and inside a frozen PyInstaller bundle; a host's entry point `chdir()`s into `resource_root()` at startup |
 
 ### Panel / UI system
 | Module | Exports |

@@ -96,6 +96,7 @@ if TYPE_CHECKING:
     from pygamine.database import Database as Database
     from pygamine.spatial_grid import SpatialGrid as SpatialGrid
     from pygamine.tilemap import TiledMap as TiledMap
+    from pygamine.paths import resource_root as resource_root, resource_path as resource_path
 
     # Networking
     from pygamine.net.protocol import (
@@ -175,6 +176,8 @@ _EXPORTS: dict[str, str] = {
     "Database": "pygamine.database",
     "SpatialGrid": "pygamine.spatial_grid",
     "TiledMap": "pygamine.tilemap",
+    "resource_root": "pygamine.paths",
+    "resource_path": "pygamine.paths",
     # Networking
     "Protocol": "pygamine.net.protocol",
     "ProtocolError": "pygamine.net.protocol",

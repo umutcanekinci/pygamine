@@ -13,6 +13,27 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.9.0] — 2026-07-29
+
+- **Added** `pygamine.paths`: `resource_root()`/`resource_path()`, the
+  frozen-vs-source filesystem anchor every host project's `__main__`
+  chdirs into at startup. Extracted after finding the exact same
+  `resource_root()` function body duplicated (only the module docstring
+  varied) across `chokepoint`/`highrise`/`hunted`/`standoff`'s own
+  `src/util/paths.py`. Those four now re-export from here instead of
+  carrying their own copy of the implementation.
+- **Added** a `pygamine-coverage-badge` console script
+  (`pygamine.devtools.coverage_badge`), replacing the byte-identical
+  `scripts/make_coverage_badge.py` five sibling projects each carried a
+  copy of. Host CI now runs `uv run pygamine-coverage-badge` instead.
+- **Fixed** the README's `[tool.uv.sources]` note, which claimed (as of
+  the 0.3.0-era text) that no host project lists `pygamine` under
+  `[project.dependencies]`, making the override "inert boilerplate
+  everywhere." All six now do list it, and `uv.lock` confirms the
+  override is genuinely active (`source = { editable = "src/pygamine" }`)
+  — corrected the note instead of leaving it telling people a working
+  mechanism is dead weight.
+
 ## [0.8.0] — 2026-07-29
 
 - **Changed** (breaking): `InputBox` now matches every other widget's

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pygamine"
-version = "0.8.0"
+version = "0.9.0"
 description = "Shared pygame utilities for personal game projects"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -26,6 +26,12 @@ classifiers = [
     "Topic :: Software Development :: Libraries",
     "Typing :: Typed",
 ]
+
+[project.scripts]
+# `uv run pygamine-coverage-badge` from a host project's repo root --
+# replaces the byte-identical scripts/make_coverage_badge.py every host
+# project used to carry a copy of.
+pygamine-coverage-badge = "pygamine.devtools.coverage_badge:main"
 
 [tool.setuptools.packages.find]
 include = ["pygamine*"]

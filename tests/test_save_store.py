@@ -8,7 +8,7 @@ import json
 
 import pytest
 
-from pygamine.save_store import SaveStore
+from pygamine.assets.save_store import SaveStore
 
 
 @pytest.fixture(autouse=True)

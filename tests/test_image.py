@@ -6,7 +6,7 @@ from __future__ import annotations
 import pygame
 import pytest
 
-from pygamine.image import load_image, nine_slice_scale, scale, scale_by
+from pygamine.assets.image import load_image, nine_slice_scale, scale, scale_by
 
 
 def _save_png(path, size, color):

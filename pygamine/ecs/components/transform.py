@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import pygame
-from pygamine.utils import Anchorable
+from pygamine.util.utils import Anchorable
 from pygamine.ecs.components.component import Component
 
 

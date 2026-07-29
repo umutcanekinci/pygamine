@@ -6,7 +6,7 @@ import math
 
 from pygame import Vector2
 
-from pygamine.math_utils import angle_between_delta, angle_between_points, distance
+from pygamine.util.math_utils import angle_between_delta, angle_between_points, distance
 
 
 def test_distance_between_identical_points_is_zero():

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from pygamine.utils import Anchorable, resolve_size
+from pygamine.util.utils import Anchorable, resolve_size
 
 
 # ── resolve_size ──────────────────────────────────────────────────────────

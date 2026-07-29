@@ -4,8 +4,8 @@ import sys
 import os
 import pygame
 from pygame import mixer
-from pygamine.mouse import Mouse
-from pygamine.splash_screen import SplashScreen
+from pygamine.app.mouse import Mouse
+from pygamine.app.splash_screen import SplashScreen
 
 # Common desktop resolutions offered by a windowed-mode resolution picker
 # (available_resolutions() filters this down to what fits the

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pygamine.asset_manager import AssetManager
+from pygamine.assets.asset_manager import AssetManager
 from pathlib import Path
 from typing import Any, Callable
 import yaml

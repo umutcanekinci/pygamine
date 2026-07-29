@@ -15,8 +15,8 @@ import sys
 import pygame
 import pytest
 
-from pygamine.application import Application
-from pygamine.mouse import Mouse
+from pygamine.app.application import Application
+from pygamine.app.mouse import Mouse
 
 
 class _TrackedApp(Application):

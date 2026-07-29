@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pygame
 
-from pygamine.utils import MouseInteractive
+from pygamine.util.utils import MouseInteractive
 
 
 class _Box(MouseInteractive):

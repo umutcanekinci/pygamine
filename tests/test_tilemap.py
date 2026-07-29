@@ -13,8 +13,8 @@ from __future__ import annotations
 import pygame
 import pytest
 
-from pygamine.camera import Camera
-from pygamine.tilemap import TiledMap
+from pygamine.app.camera import Camera
+from pygamine.assets.tilemap import TiledMap
 
 RED = (255, 0, 0, 255)
 GREEN = (0, 255, 0, 255)

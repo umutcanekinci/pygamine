@@ -6,7 +6,7 @@ from __future__ import annotations
 import pygame
 import pytest
 
-from pygamine.debug import Debug
+from pygamine.app.debug import Debug
 
 
 @pytest.fixture

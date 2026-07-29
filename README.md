@@ -62,32 +62,32 @@ matching dependency entry.
 ### Game loop
 | Module | Exports | Notes |
 |---|---|---|
-| `application` | `Application` | Top-level run loop (`init/run/handle_event/update/draw`), fullscreen toggle, debug overlay hook, `self.splash`/`show_splash()`, opt-in `fixed_aspect` letterboxing |
-| `mouse` | `Mouse` | Cursor position + optional custom-cursor `GameObject` |
-| `camera` | `Camera` | Edge-scroll camera with world↔screen transforms |
-| `splash_screen` | splash helper | Pre-loop splash render |
-| `debug` | debug helpers | Wireframes and live state overlay |
+| `app.application` | `Application` | Top-level run loop (`init/run/handle_event/update/draw`), fullscreen toggle, debug overlay hook, `self.splash`/`show_splash()`, opt-in `fixed_aspect` letterboxing |
+| `app.mouse` | `Mouse` | Cursor position + optional custom-cursor `GameObject` |
+| `app.camera` | `Camera` | Edge-scroll camera with world↔screen transforms |
+| `app.splash_screen` | splash helper | Pre-loop splash render |
+| `app.debug` | debug helpers | Wireframes and live state overlay |
 
 ### Assets
 | Module | Exports |
 |---|---|
-| `asset_path` | `AssetPath`, `ImagePath`, `FontPath`, `SoundPath`, `PathLike` |
-| `asset_manager` | `AssetManager` — loads images/sounds/fonts from a YAML manifest |
-| `image` | `load_image`, `scale`, `scale_by`, `nine_slice_scale` |
-| `font` | `load_font` (asset-key first, falls back to `SysFont`) |
-| `sprite_sheet` | `SpriteSheet` (`from_path`, `strip`, `grid`, `frame`) |
-| `database` | `Database` — thin SQLite wrapper, stores `.db` under `databases/` |
-| `save_store` | `SaveStore` — JSON-backed key-value persistence for settings/saves under `saves/`, atomic writes |
-| `tilemap` | `TiledMap` — Tiled `.tmx` loader (pytmx-backed): tile dims, object-group iteration, offscreen pre-render, camera-aware draw |
-| `paths` | `resource_root`, `resource_path` — cwd anchor that works from source and inside a frozen PyInstaller bundle; a host's entry point `chdir()`s into `resource_root()` at startup |
+| `assets.asset_path` | `AssetPath`, `ImagePath`, `FontPath`, `SoundPath`, `PathLike` |
+| `assets.asset_manager` | `AssetManager` — loads images/sounds/fonts from a YAML manifest |
+| `assets.image` | `load_image`, `scale`, `scale_by`, `nine_slice_scale` |
+| `assets.font` | `load_font` (asset-key first, falls back to `SysFont`) |
+| `assets.sprite_sheet` | `SpriteSheet` (`from_path`, `strip`, `grid`, `frame`) |
+| `assets.database` | `Database`, `DatabaseError` — thin SQLite wrapper, stores `.db` under `databases/` |
+| `assets.save_store` | `SaveStore` — JSON-backed key-value persistence for settings/saves under `saves/`, atomic writes |
+| `assets.tilemap` | `TiledMap` — Tiled `.tmx` loader (pytmx-backed): tile dims, object-group iteration, offscreen pre-render, camera-aware draw |
+| `assets.paths` | `resource_root`, `resource_path` — cwd anchor that works from source and inside a frozen PyInstaller bundle; a host's entry point `chdir()`s into `resource_root()` at startup |
 
 ### Panel / UI system
 | Module | Exports |
 |---|---|
-| `panel_manager` | `PanelManager` — named panels with `current_panel` switching |
-| `panel_loader` | `PanelLoader` — YAML → objects via registered factories |
-| `panel_loader_ext` | `PanelLoaderExt` — adds `object_templates` inheritance |
-| `panel_factory` | `make_factory`, `make_text_factory` |
+| `panels.panel_manager` | `PanelManager` — named panels with `current_panel` switching |
+| `panels.panel_loader` | `PanelLoader` — YAML → objects via registered factories |
+| `panels.panel_loader_ext` | `PanelLoaderExt` — adds `object_templates` inheritance |
+| `panels.panel_factory` | `make_factory`, `make_text_factory` |
 
 ### ECS
 | Module | Exports |
@@ -115,9 +115,9 @@ matching dependency entry.
 ### Utilities
 | Module | Exports |
 |---|---|
-| `utils` | `MouseInteractive`, `Anchorable`, `resolve_size`, `ANCHORS` |
-| `math_utils` | Vector and angle helpers |
-| `spatial_grid` | `SpatialGrid` — uniform spatial hash grid; turns O(N²) neighbour/overlap queries into roughly O(N) |
+| `util.utils` | `MouseInteractive`, `Anchorable`, `resolve_size`, `ANCHORS` |
+| `util.math_utils` | Vector and angle helpers |
+| `util.spatial_grid` | `SpatialGrid` — uniform spatial hash grid; turns O(N²) neighbour/overlap queries into roughly O(N) |
 
 ### Networking
 
@@ -133,9 +133,7 @@ GUI-free and application-agnostic — these classes move framed messages over TC
 ### Load a sprite sheet → animated sprite
 
 ```python
-from pygamine.sprite_sheet import SpriteSheet
-from pygamine.ecs.components.animation_clip import AnimationClip
-from pygamine.ecs.animated_sprite import AnimatedSprite
+from pygamine import SpriteSheet, AnimatedSprite
 
 frames = SpriteSheet.from_path("coin_strip4.png").strip(4)
 coin = AnimatedSprite(frames=frames, fps=8, pos=(100, 100))
@@ -147,7 +145,7 @@ coin.draw(surface)
 ### Asset path helpers
 
 ```python
-from pygamine.asset_path import ImagePath, FontPath, SoundPath
+from pygamine import ImagePath, FontPath, SoundPath
 
 ImagePath("player")             # → assets/images/player.png
 ImagePath("hero", "sprites")    # → assets/images/sprites/hero.png
@@ -160,7 +158,7 @@ All `AssetPath` subclasses implement `__fspath__`, so they can be passed directl
 ### Database
 
 ```python
-from pygamine.database import Database
+from pygamine import Database
 
 db = Database("savefile")
 rows = db.execute_safely(
@@ -169,10 +167,17 @@ rows = db.execute_safely(
 )
 ```
 
-`execute_safely` handles connect/commit/disconnect in one call; use `connect/execute/commit/disconnect` directly when you need to batch operations. Any failure raises `pygamine.database.DatabaseError` — catch it (or let it propagate) rather than checking a return value.
+`execute_safely` handles connect/commit/disconnect in one call; use `connect/execute/commit/disconnect` directly when you need to batch operations. Any failure raises `DatabaseError` (`from pygamine import DatabaseError`) — catch it (or let it propagate) rather than checking a return value.
 
 ## Adding a new module
 
-1. Create `pygamine/<module>.py`
-2. Import it where needed: `from pygamine.<module> import ...`
-3. No reinstall required when consumed as a submodule on `sys.path`
+1. Create `pygamine/<subpackage>/<module>.py` — pick the subpackage from the
+   module map above (`app`, `assets`, `panels`, `ecs`, `ui_widgets`, `net`,
+   `util`); add a new subpackage only if the module genuinely doesn't fit
+   any existing one.
+2. Add the public names to `pygamine/__init__.py`'s `_EXPORTS` dict (and the
+   matching `TYPE_CHECKING` import, kept in sync with it) so `from pygamine
+   import <Name>` works — this is the form consumers should use; deep-path
+   imports (`from pygamine.assets.image import load_image`) still work too,
+   for anything not surfaced there.
+3. No reinstall required when consumed as a submodule on `sys.path`.

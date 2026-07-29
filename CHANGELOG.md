@@ -13,6 +13,33 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.13.0] — 2026-07-29
+
+- **Changed** (breaking for deep-path imports only): reorganized the 21
+  loose files that previously sat directly in the package root into
+  subpackages, mirroring the README's own existing module-map sections
+  so no new mental model was invented, just made literal:
+  - `app/` — `application`, `mouse`, `camera`, `splash_screen`, `debug`
+  - `assets/` — `asset_path`, `asset_manager`, `image`, `font`,
+    `sprite_sheet`, `database`, `save_store`, `tilemap`, `paths`
+  - `panels/` — `panel_manager`, `panel_loader`, `panel_loader_ext`,
+    `panel_factory`
+  - `util/` — `utils`, `math_utils`, `spatial_grid`
+
+  `ecs/`, `ui_widgets/`, `net/`, `devtools/` were already organized and
+  are unchanged. The package root now holds only `__init__.py` and
+  `py.typed`.
+
+  This is invisible to every consumer already on the curated top-level
+  API (`from pygamine import X`) -- verified by round-tripping all 70
+  exported names through `pygamine._EXPORTS` after the move -- since
+  only `_EXPORTS`' *values* (which submodule defines each name) changed,
+  not its keys. Only deep-path imports (`from pygamine.<old path> import
+  X`) break; there were none left in any of the 6 consumer projects after
+  the [0.10.0] top-level-API migration, but any code still using the old
+  paths needs updating (see the module map for the new locations, or the
+  git history of `pygamine/__init__.py` for the exact old→new mapping).
+
 ## [0.12.0] — 2026-07-29
 
 - **Changed** (breaking): standardized the debug-info reporting API across

@@ -6,10 +6,10 @@ from __future__ import annotations
 import pygame
 import pytest
 
-from pygamine.asset_manager import AssetManager
+from pygamine.assets.asset_manager import AssetManager
 from pygamine.ecs.components.transform import Transform
-from pygamine.panel_loader_ext import PanelLoaderExt
-from pygamine.panel_manager import PanelManager
+from pygamine.panels.panel_loader_ext import PanelLoaderExt
+from pygamine.panels.panel_manager import PanelManager
 
 
 class _Built:

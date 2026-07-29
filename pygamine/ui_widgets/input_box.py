@@ -12,7 +12,7 @@ import pygame
 from pygamine.ecs.game_object import GameObject
 from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
 from pygamine.ecs.components.transform import Transform
-from pygamine.utils import Anchorable, MouseInteractive
+from pygamine.util.utils import Anchorable, MouseInteractive
 
 _DEFAULT_FONT_SIZE = 32
 

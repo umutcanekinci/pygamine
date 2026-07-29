@@ -10,8 +10,8 @@ from __future__ import annotations
 
 import pygame
 
-from pygamine.font import load_font
-from pygamine.sprite_sheet import SpriteSheet
+from pygamine.assets.font import load_font
+from pygamine.assets.sprite_sheet import SpriteSheet
 from pygamine.ui_widgets.text_object import TextObject
 from pygamine.ui_widgets.slider import Slider
 from pygamine.ecs.animated_sprite import AnimatedSprite

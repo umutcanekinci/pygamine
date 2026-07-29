@@ -7,7 +7,7 @@ import sqlite3
 
 import pytest
 
-from pygamine.database import Database, DatabaseError
+from pygamine.assets.database import Database, DatabaseError
 
 
 @pytest.fixture(autouse=True)

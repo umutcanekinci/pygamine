@@ -6,7 +6,7 @@ from __future__ import annotations
 import pygame
 import pytest
 
-from pygamine.asset_manager import AssetManager
+from pygamine.assets.asset_manager import AssetManager
 from pygamine.ecs.animated_sprite import AnimatedSprite, AnimatedSpriteFactory
 from pygamine.ecs.components.transform import Transform
 

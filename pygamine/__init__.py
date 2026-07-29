@@ -32,11 +32,11 @@ if TYPE_CHECKING:
     # nothing in this file references them outside of __all__/_EXPORTS.
 
     # Application / window management
-    from pygamine.application import Application as Application
-    from pygamine.mouse import Mouse as Mouse
-    from pygamine.camera import Camera as Camera, Drawable as Drawable
-    from pygamine.debug import Debug as Debug
-    from pygamine.splash_screen import SplashScreen as SplashScreen
+    from pygamine.app.application import Application as Application
+    from pygamine.app.mouse import Mouse as Mouse
+    from pygamine.app.camera import Camera as Camera, Drawable as Drawable
+    from pygamine.app.debug import Debug as Debug
+    from pygamine.app.splash_screen import SplashScreen as SplashScreen
 
     # ECS core
     from pygamine.ecs.game_object import GameObject as GameObject
@@ -58,22 +58,22 @@ if TYPE_CHECKING:
     from pygamine.ecs.components.animation_clip import AnimationClip as AnimationClip
 
     # Assets
-    from pygamine.asset_path import (
+    from pygamine.assets.asset_path import (
         AssetPath as AssetPath, ImagePath as ImagePath, FontPath as FontPath,
         SoundPath as SoundPath, PathLike as PathLike,
     )
-    from pygamine.asset_manager import AssetManager as AssetManager
-    from pygamine.sprite_sheet import SpriteSheet as SpriteSheet
-    from pygamine.image import (
+    from pygamine.assets.asset_manager import AssetManager as AssetManager
+    from pygamine.assets.sprite_sheet import SpriteSheet as SpriteSheet
+    from pygamine.assets.image import (
         load_image as load_image, scale as scale, scale_by as scale_by, nine_slice_scale as nine_slice_scale,
     )
-    from pygamine.font import load_font as load_font
+    from pygamine.assets.font import load_font as load_font
 
     # Panels / UI
-    from pygamine.panel_manager import PanelManager as PanelManager
-    from pygamine.panel_loader import PanelLoader as PanelLoader
-    from pygamine.panel_loader_ext import PanelLoaderExt as PanelLoaderExt
-    from pygamine.panel_factory import (
+    from pygamine.panels.panel_manager import PanelManager as PanelManager
+    from pygamine.panels.panel_loader import PanelLoader as PanelLoader
+    from pygamine.panels.panel_loader_ext import PanelLoaderExt as PanelLoaderExt
+    from pygamine.panels.panel_factory import (
         make_factory as make_factory, make_animated_factory as make_animated_factory,
         make_slider_factory as make_slider_factory, make_text_factory as make_text_factory,
     )
@@ -83,20 +83,20 @@ if TYPE_CHECKING:
     from pygamine.ui_widgets.menu_controller import MenuController as MenuController
 
     # Utils
-    from pygamine.utils import (
+    from pygamine.util.utils import (
         Anchorable as Anchorable, MouseInteractive as MouseInteractive, resolve_size as resolve_size,
     )
-    from pygamine.math_utils import (
+    from pygamine.util.math_utils import (
         distance as distance, angle_between_points as angle_between_points,
         angle_between_delta as angle_between_delta,
     )
 
     # Persistence / world data
-    from pygamine.save_store import SaveStore as SaveStore
-    from pygamine.database import Database as Database, DatabaseError as DatabaseError
-    from pygamine.spatial_grid import SpatialGrid as SpatialGrid
-    from pygamine.tilemap import TiledMap as TiledMap
-    from pygamine.paths import resource_root as resource_root, resource_path as resource_path
+    from pygamine.assets.save_store import SaveStore as SaveStore
+    from pygamine.assets.database import Database as Database, DatabaseError as DatabaseError
+    from pygamine.util.spatial_grid import SpatialGrid as SpatialGrid
+    from pygamine.assets.tilemap import TiledMap as TiledMap
+    from pygamine.assets.paths import resource_root as resource_root, resource_path as resource_path
 
     # Networking
     from pygamine.net.protocol import (
@@ -112,12 +112,12 @@ if TYPE_CHECKING:
 # sync when adding a new public export.
 _EXPORTS: dict[str, str] = {
     # Application / window management
-    "Application": "pygamine.application",
-    "Mouse": "pygamine.mouse",
-    "Camera": "pygamine.camera",
-    "Drawable": "pygamine.camera",
-    "Debug": "pygamine.debug",
-    "SplashScreen": "pygamine.splash_screen",
+    "Application": "pygamine.app.application",
+    "Mouse": "pygamine.app.mouse",
+    "Camera": "pygamine.app.camera",
+    "Drawable": "pygamine.app.camera",
+    "Debug": "pygamine.app.debug",
+    "SplashScreen": "pygamine.app.splash_screen",
     # ECS core
     "GameObject": "pygamine.ecs.game_object",
     "GameObjectDict": "pygamine.ecs.game_object_dict",
@@ -140,45 +140,45 @@ _EXPORTS: dict[str, str] = {
     "Animator": "pygamine.ecs.components.animator",
     "AnimationClip": "pygamine.ecs.components.animation_clip",
     # Assets
-    "AssetPath": "pygamine.asset_path",
-    "ImagePath": "pygamine.asset_path",
-    "FontPath": "pygamine.asset_path",
-    "SoundPath": "pygamine.asset_path",
-    "PathLike": "pygamine.asset_path",
-    "AssetManager": "pygamine.asset_manager",
-    "SpriteSheet": "pygamine.sprite_sheet",
-    "load_image": "pygamine.image",
-    "scale": "pygamine.image",
-    "scale_by": "pygamine.image",
-    "nine_slice_scale": "pygamine.image",
-    "load_font": "pygamine.font",
+    "AssetPath": "pygamine.assets.asset_path",
+    "ImagePath": "pygamine.assets.asset_path",
+    "FontPath": "pygamine.assets.asset_path",
+    "SoundPath": "pygamine.assets.asset_path",
+    "PathLike": "pygamine.assets.asset_path",
+    "AssetManager": "pygamine.assets.asset_manager",
+    "SpriteSheet": "pygamine.assets.sprite_sheet",
+    "load_image": "pygamine.assets.image",
+    "scale": "pygamine.assets.image",
+    "scale_by": "pygamine.assets.image",
+    "nine_slice_scale": "pygamine.assets.image",
+    "load_font": "pygamine.assets.font",
     # Panels / UI
-    "PanelManager": "pygamine.panel_manager",
-    "PanelLoader": "pygamine.panel_loader",
-    "PanelLoaderExt": "pygamine.panel_loader_ext",
-    "make_factory": "pygamine.panel_factory",
-    "make_animated_factory": "pygamine.panel_factory",
-    "make_slider_factory": "pygamine.panel_factory",
-    "make_text_factory": "pygamine.panel_factory",
+    "PanelManager": "pygamine.panels.panel_manager",
+    "PanelLoader": "pygamine.panels.panel_loader",
+    "PanelLoaderExt": "pygamine.panels.panel_loader_ext",
+    "make_factory": "pygamine.panels.panel_factory",
+    "make_animated_factory": "pygamine.panels.panel_factory",
+    "make_slider_factory": "pygamine.panels.panel_factory",
+    "make_text_factory": "pygamine.panels.panel_factory",
     "TextObject": "pygamine.ui_widgets.text_object",
     "Slider": "pygamine.ui_widgets.slider",
     "InputBox": "pygamine.ui_widgets.input_box",
     "MenuController": "pygamine.ui_widgets.menu_controller",
     # Utils
-    "Anchorable": "pygamine.utils",
-    "MouseInteractive": "pygamine.utils",
-    "resolve_size": "pygamine.utils",
-    "distance": "pygamine.math_utils",
-    "angle_between_points": "pygamine.math_utils",
-    "angle_between_delta": "pygamine.math_utils",
+    "Anchorable": "pygamine.util.utils",
+    "MouseInteractive": "pygamine.util.utils",
+    "resolve_size": "pygamine.util.utils",
+    "distance": "pygamine.util.math_utils",
+    "angle_between_points": "pygamine.util.math_utils",
+    "angle_between_delta": "pygamine.util.math_utils",
     # Persistence / world data
-    "SaveStore": "pygamine.save_store",
-    "Database": "pygamine.database",
-    "DatabaseError": "pygamine.database",
-    "SpatialGrid": "pygamine.spatial_grid",
-    "TiledMap": "pygamine.tilemap",
-    "resource_root": "pygamine.paths",
-    "resource_path": "pygamine.paths",
+    "SaveStore": "pygamine.assets.save_store",
+    "Database": "pygamine.assets.database",
+    "DatabaseError": "pygamine.assets.database",
+    "SpatialGrid": "pygamine.util.spatial_grid",
+    "TiledMap": "pygamine.assets.tilemap",
+    "resource_root": "pygamine.assets.paths",
+    "resource_path": "pygamine.assets.paths",
     # Networking
     "Protocol": "pygamine.net.protocol",
     "ProtocolError": "pygamine.net.protocol",

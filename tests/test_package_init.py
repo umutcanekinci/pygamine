@@ -54,7 +54,7 @@ def test_accessing_a_lightweight_name_does_not_pull_in_asset_manager_or_tilemap(
         "pygamine.Application\n"
         "pygamine.GameObject\n"
         "import sys\n"
-        "print('pygamine.asset_manager' in sys.modules, 'pygamine.tilemap' in sys.modules)\n"
+        "print('pygamine.assets.asset_manager' in sys.modules, 'pygamine.assets.tilemap' in sys.modules)\n"
     )
     assert out == "False False"
 
@@ -64,7 +64,7 @@ def test_accessing_asset_manager_does_import_it_and_caches_the_result():
         "import pygamine\n"
         "pygamine.AssetManager\n"
         "import sys\n"
-        "print('pygamine.asset_manager' in sys.modules)\n"
+        "print('pygamine.assets.asset_manager' in sys.modules)\n"
         "print(pygamine.__dict__['AssetManager'] is pygamine.AssetManager)\n"
     )
     assert out == "True\nTrue"

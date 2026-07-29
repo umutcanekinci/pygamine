@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import pygame
 
-from pygamine.sprite_sheet import SpriteSheet
+from pygamine.assets.sprite_sheet import SpriteSheet
 from pygamine.ecs.components.animator import Animator
 from pygamine.ecs.components.animation_clip import AnimationClip
 from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D

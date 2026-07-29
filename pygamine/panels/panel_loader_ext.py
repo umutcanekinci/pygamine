@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import yaml
 from pathlib import Path
-from pygamine.panel_loader import PanelLoader
+from pygamine.panels.panel_loader import PanelLoader
 
 
 class PanelLoaderExt(PanelLoader):

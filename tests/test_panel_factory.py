@@ -13,12 +13,12 @@ import os
 import pygame
 import pytest
 
-from pygamine.asset_manager import AssetManager
+from pygamine.assets.asset_manager import AssetManager
 from pygamine.ecs.animated_sprite import AnimatedSprite
 from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
 from pygamine.ecs.components.transform import Transform
 from pygamine.ecs.state_object import HoverableStateObject, StateObject
-from pygamine.panel_factory import make_animated_factory, make_factory, make_text_factory
+from pygamine.panels.panel_factory import make_animated_factory, make_factory, make_text_factory
 from pygamine.ui_widgets.text_object import TextObject
 
 

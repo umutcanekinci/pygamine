@@ -1,4 +1,4 @@
-"""Unit tests for pygamine.paths: resource_root()/resource_path(), the
+"""Unit tests for pygamine.assets.paths: resource_root()/resource_path(), the
 frozen-vs-source filesystem anchor host projects chdir into at startup.
 """
 from __future__ import annotations
@@ -6,7 +6,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from pygamine.paths import resource_path, resource_root
+from pygamine.assets.paths import resource_path, resource_root
 
 
 def test_resource_root_uses_meipass_when_frozen(monkeypatch, tmp_path):

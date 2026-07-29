@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pygame
 
-from pygamine.utils import Anchorable
+from pygamine.util.utils import Anchorable
 from pygamine.ecs.game_object import GameObject
 from pygamine.ecs.components.sprite_renderer2d import SpriteRenderer2D
 

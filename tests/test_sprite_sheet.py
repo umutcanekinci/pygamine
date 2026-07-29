@@ -6,8 +6,8 @@ from __future__ import annotations
 
 import pygame
 
-from pygamine.asset_manager import AssetManager
-from pygamine.sprite_sheet import SpriteSheet
+from pygamine.assets.asset_manager import AssetManager
+from pygamine.assets.sprite_sheet import SpriteSheet
 
 
 def _banded_strip(colors, band_size=10, horizontal=True):

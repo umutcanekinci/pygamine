@@ -15,8 +15,8 @@ you know the source will outlive the frames.
 from __future__ import annotations
 
 import pygame
-from pygamine.asset_path import PathLike
-from pygamine.image import load_image
+from pygamine.assets.asset_path import PathLike
+from pygamine.assets.image import load_image
 
 
 class SpriteSheet:

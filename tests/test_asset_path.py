@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import os
 
-from pygamine.asset_path import AssetPath, FontPath, ImagePath, SoundPath
+from pygamine.assets.asset_path import AssetPath, FontPath, ImagePath, SoundPath
 
 
 def test_full_path_without_folder():

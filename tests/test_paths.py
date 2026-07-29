@@ -15,14 +15,19 @@ def test_resource_root_uses_meipass_when_frozen(monkeypatch, tmp_path):
 
 
 def test_resource_root_falls_back_to_project_root_when_not_frozen(monkeypatch):
+    """Deliberately not just `root.is_dir()`: every ancestor of this file is
+    itself a real, existing directory, so that assertion alone would pass
+    even at the wrong depth (e.g. one level short, landing on `src/pygamine`
+    instead of the true project root) -- which is exactly the regression
+    this caught when paths.py moved into assets/ and the parents[N] index
+    needed to grow by one but didn't, immediately at the next opportunity.
+    Instead, verify resource_root() actually contains this file at its
+    known, fixed relative path (src/pygamine/pygamine/assets/paths.py)."""
     monkeypatch.delattr(sys, "_MEIPASS", raising=False)
     root = resource_root()
-    # From source, three levels up from this package's own paths.py
-    # (pygamine/paths.py -> pygamine/ -> src/pygamine/ -> project root)
-    # is wherever pygamine itself is checked out, not necessarily a host
-    # game project -- just assert it's a real, existing directory, since
-    # the exact location depends on how this test suite is run.
-    assert root.is_dir()
+    this_file = Path(__file__).resolve().parents[1] / "pygamine" / "assets" / "paths.py"
+    expected = root / "src" / "pygamine" / "pygamine" / "assets" / "paths.py"
+    assert expected.resolve() == this_file.resolve()
 
 
 def test_resource_path_joins_onto_resource_root(monkeypatch, tmp_path):

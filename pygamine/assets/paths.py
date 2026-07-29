@@ -25,13 +25,13 @@ from pathlib import Path
 def resource_root() -> Path:
     """Directory that contains the bundled ``assets/`` (and similar) trees.
 
-    Frozen: the PyInstaller extraction dir. From source: the project root
-    two levels up from ``src/pygamine/pygamine/paths.py``.
+    Frozen: the PyInstaller extraction dir. From source: the project root,
+    walked up from ``src/pygamine/pygamine/assets/paths.py``.
     """
     bundle = getattr(sys, "_MEIPASS", None)
     if bundle is not None:
         return Path(bundle)
-    return Path(__file__).resolve().parents[3]
+    return Path(__file__).resolve().parents[4]
 
 
 def resource_path(*parts: str) -> Path:

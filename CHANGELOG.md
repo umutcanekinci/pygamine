@@ -13,6 +13,31 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.13.1] — 2026-07-29
+
+- **Fixed** a real regression from [0.13.0], caught immediately by a
+  consumer's own test suite (chokepoint's config loader): `paths.py`'s
+  move into `assets/` made it one directory deeper
+  (`pygamine/paths.py` -> `pygamine/assets/paths.py`), so
+  `resource_root()`'s `Path(__file__).resolve().parents[N]` needed `N`
+  to grow from `3` to `4` -- it didn't, so every host project's
+  `resource_root()` silently resolved one level too shallow (landing on
+  `<project>/src/pygamine` instead of `<project>/`) the instant it
+  stopped being frozen-only and someone actually loaded a real
+  cwd-relative config path. `test_resource_root_falls_back_to_project_
+  root_when_not_frozen` didn't catch this at review time because it only
+  asserted `root.is_dir()` -- true at *any* ancestor depth of a real
+  file, not just the correct one -- strengthened to verify
+  `resource_root()` actually contains this repo's own known file at its
+  fixed relative path instead.
+- **Fixed** a matching gap in the [0.10.0]/[0.13.0] import migrations:
+  they only scanned each consumer's `src/`/`bench/`/`__main__.py`, never
+  each project's own `tests/`/`scripts/` directories -- 6 files across 4
+  projects (`chokepoint`, `highrise`, `standoff`, `artifical-chaos`)
+  still had deep-path `from pygamine.<old path> import X` imports
+  referencing pre-reorg module locations, broken by [0.13.0]. Migrated
+  to the top-level API along with everything else.
+
 ## [0.13.0] — 2026-07-29
 
 - **Changed** (breaking for deep-path imports only): reorganized the 21

@@ -48,6 +48,8 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # only this job pushes the regenerated coverage badge
     env:
       # Pin the interpreter so we always land on a Python with prebuilt
       # pygame-ce wheels (project allows >=3.12).
@@ -63,5 +65,21 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Run tests
-        run: uv run --group dev pytest -q
+      - name: Run tests with coverage
+        run: uv run --group dev pytest -q --cov=pygamine --cov-report=json --cov-report=term
+
+      # Dogfoods this repo's own console script (see
+      # pygamine/devtools/coverage_badge.py) -- the same one every host
+      # project's CI now runs instead of keeping its own copy.
+      # Only on a push to main -- PRs (esp. from forks) may lack push
+      # access, and there's no reason to commit on every branch.
+      - name: Update coverage badge
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: uv run pygamine-coverage-badge
+
+      - name: Commit updated badge
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update coverage badge [skip ci]"
+          file_pattern: .github/badges/coverage.json

@@ -13,6 +13,34 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.11.0] — 2026-07-29
+
+- **Fixed** a real bug in `MouseInteractive.is_mouse_over()`: its
+  parent-offset branch (`self.parent.rect + self.rect`) would raise
+  `TypeError` if ever triggered -- `pygame.Rect` doesn't support `Rect +
+  Rect` -- and, confirmed by grepping every consumer project, nothing
+  anywhere ever actually sets a bare `self.parent` on a
+  `MouseInteractive` object (parenting goes through `Transform`'s own
+  `.parent` field everywhere, e.g. `self.rect.set_parent(...)`, which
+  already bakes the parent's offset into absolute coordinates at
+  `set_position()` time). The branch was dead *and* broken; removed it --
+  `is_mouse_over` now just calls `self.rect.collidepoint(...)` directly.
+- **Removed** `PanelLoader._resolve_position`/`_resolve_size`: confirmed
+  dead via 0% coverage and zero call sites anywhere -- panel factories
+  (`make_factory`, etc.) already resolve position/size themselves.
+- **Added** `pytest-cov` to the dev group and wired up coverage
+  reporting + a `.github/badges/coverage.json` badge in this repo's own
+  CI and README, dogfooding the `pygamine-coverage-badge` console
+  script every host project's CI now runs. Coverage sat at 97% before
+  this release surfaced the two items above (both now covered,
+  currently 98%) -- it was previously untracked, unlike every project
+  that depends on this package.
+- **Added** direct unit tests for `MouseInteractive` (`is_mouse_over`/
+  `is_clicked`), previously only exercised indirectly through
+  `StateObject`/`Slider`/`InputBox`'s own tests, which never hit every
+  branch (a non-left mouse button, visibility toggling mid-press, an
+  unrelated event type in between press and release).
+
 ## [0.10.0] — 2026-07-29
 
 - **Added** `DatabaseError` to the curated top-level API (`from pygamine

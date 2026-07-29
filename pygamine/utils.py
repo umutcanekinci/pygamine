@@ -6,19 +6,23 @@ import pygame
 
 
 class MouseInteractive:
-    """Adds is_mouse_over and is_clicked behavior."""
+    """Adds is_mouse_over and is_clicked behavior.
+
+    `self.rect` is expected to already be in absolute coordinates -- a
+    Transform's `set_position()` bakes its parent's offset in at
+    position-set time, so no separate parent-relative adjustment is needed
+    here (or possible: pygame.Rect doesn't support Rect + Rect anyway).
+    """
     # `rect` may be a plain pygame.Rect or a Transform (which subclasses pygame.Rect
     # but adds extra methods). Declared as Any to allow either in subclasses.
     rect: Any
-    parent: Any  # optional, included so the parent object's rect is factored in too
     visible: bool = True
 
     # Press-tracking instance state
     _pressed: bool = False
 
     def is_mouse_over(self, mouse_pos) -> bool:
-        rect = self.parent.rect + self.rect if hasattr(self, "parent") else self.rect
-        return mouse_pos is not None and rect.collidepoint(mouse_pos) and self.visible
+        return mouse_pos is not None and self.rect.collidepoint(mouse_pos) and self.visible
 
     def is_clicked(self, event, mouse_pos) -> bool:
         """Returns True: mouse was pressed AND released over this object."""

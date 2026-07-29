@@ -133,16 +133,3 @@ class PanelLoader:
                 obj_def["position"] = [
                     round(c * k) if isinstance(c, (int, float)) else c for c in pos
                 ]
-
-    def _resolve_position(self, pos: Any) -> tuple:
-        if not isinstance(pos, list) or len(pos) != 2:
-            raise ValueError(f"position must be [x, y], got {pos!r}")
-        x, y = pos
-        return (x, y)
-
-    def _resolve_size(self, size: Any) -> tuple | Transform:
-        if size == "WINDOW":
-            return self.window_transform
-        if isinstance(size, list) and len(size) == 2:
-            return tuple(size)
-        raise ValueError(f"size must be [w, h] or 'WINDOW', got {size!r}")

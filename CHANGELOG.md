@@ -13,6 +13,23 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.14.1] — 2026-07-30
+
+- **Fixed** `test_resource_root_falls_back_to_project_root_when_not_frozen`,
+  broken the moment [0.14.0]'s new CI matrix actually ran this repo's own
+  test suite as its own standalone checkout for the first time (previously
+  this test only ever ran nested inside a host project's `src/pygamine/`,
+  since that's the only context anyone had run it in) -- it asserted
+  against `Path(__file__)`, silently assuming the ambient checkout
+  happened to be vendored inside a host project three levels down, which
+  isn't true when pygamine's own repo is checked out on its own (exactly
+  what CI does, and what a plain `git clone` + `pytest` does too). Fixed
+  by building a fake `<root>/src/pygamine/pygamine/assets/paths.py` tree
+  in `tmp_path` and pointing `paths.py`'s own `__file__` at it, so the
+  test no longer depends on where the suite itself happens to be checked
+  out. Confirmed it still catches the real regression it was written for
+  (reverting to the pre-[0.13.1] `parents[3]` fails it again).
+
 ## [0.14.0] — 2026-07-29
 
 - **Added** a real Python version compatibility matrix (3.12/3.13/3.14) to

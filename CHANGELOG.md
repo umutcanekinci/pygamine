@@ -13,6 +13,21 @@ together rather than reconstructing a commit-by-commit rationale for every
 change. Anything before `e5c1fa6` (the commit that first introduced
 `pyproject.toml` itself) isn't versioned at all; see `git log` for that era.
 
+## [0.12.0] — 2026-07-29
+
+- **Changed** (breaking): standardized the debug-info reporting API across
+  `Camera`/`Mouse`/`StateObject` -- all three now expose a plain `.info()`
+  method returning `tuple[str, dict]`. Previously all three disagreed:
+  `Camera.info()` (method, no prefix), `Mouse.get_info()` (method, `get_`
+  prefix), `StateObject.get_info` (a **property** with a `get_` prefix --
+  the actively misleading combination, since a property already reads
+  like an attribute; naming it `get_X` invites calling it as
+  `get_info()`, which would `TypeError` on the returned tuple). Found by
+  a real consumer call site (chokepoint's debug overlay) mixing all
+  three conventions in one list literal. `Mouse.get_info()` ->
+  `Mouse.info()`; `StateObject.get_info` (property) -> `StateObject.info()`
+  (method).
+
 ## [0.11.0] — 2026-07-29
 
 - **Fixed** a real bug in `MouseInteractive.is_mouse_over()`: its

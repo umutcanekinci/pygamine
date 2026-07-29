@@ -154,27 +154,27 @@ def test_draw_without_a_cursor_does_not_raise():
     mouse.draw(pygame.Surface((10, 10)))  # no cursor set -- must not raise
 
 
-# ── get_info ────────────────────────────────────────────────────────────
+# ── info ──────────────────────────────────────────────────────────────────
 
 
-def test_get_info_without_tile_size(monkeypatch):
+def test_info_without_tile_size(monkeypatch):
     monkeypatch.setattr(pygame.mouse, "get_pos", lambda: (7, 8))
     mouse = Mouse()
     mouse.update()
 
-    label, data = mouse.get_info()
+    label, data = mouse.info()
 
     assert label == "Mouse Info:"
     assert data["pos"] == (7, 8)
     assert data["tile_pos"] is None
 
 
-def test_get_info_with_tile_size(monkeypatch):
+def test_info_with_tile_size(monkeypatch):
     monkeypatch.setattr(pygame.mouse, "get_pos", lambda: (70, 80))
     mouse = Mouse(tile_size=32)
     mouse.update()
 
-    label, data = mouse.get_info()
+    label, data = mouse.info()
 
     assert data["pos"] == (70, 80)
     assert data["tile_pos"] == (2, 2)

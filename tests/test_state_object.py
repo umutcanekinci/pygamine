@@ -173,12 +173,12 @@ def test_setting_focused_without_a_registered_state_does_not_raise():
     assert obj.focused is True
 
 
-# ── get_info ─────────────────────────────────────────────────────────────
+# ── info ──────────────────────────────────────────────────────────────────
 
 
-def test_get_info_reports_state_pos_and_size(images):
+def test_info_reports_state_pos_and_size(images):
     obj = StateObject(pos=(10, 20), size=(30, 40), image_path=images["base"])
-    label, data = obj.get_info
+    label, data = obj.info()
     assert label == "StateObject Info:"
     assert data["state"] is None
     assert data["pos"] == (10, 20)

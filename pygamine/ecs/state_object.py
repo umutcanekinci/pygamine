@@ -91,8 +91,7 @@ class StateObject(Anchorable, MouseInteractive, GameObject):
     def _active_surface(self) -> pygame.Surface:
         return self.images[self._state]
 
-    @property
-    def get_info(self) -> tuple:
+    def info(self) -> tuple:
         return "StateObject Info:", {
             "state": self._state,
             "pos": self.rect.topleft,

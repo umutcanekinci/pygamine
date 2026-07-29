@@ -46,7 +46,7 @@ class Mouse:
         if self.cursor:
             self.cursor.draw(window)
 
-    def get_info(self):
+    def info(self) -> tuple:
         return "Mouse Info:", {
             "pos": self.position,
             "tile_pos": self.tile_pos if self.tile_size else None
